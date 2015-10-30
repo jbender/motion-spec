@@ -1,6 +1,4 @@
-$-w,w = nil, $-w
-require File.expand_path('../spec_helper', __FILE__)
-$-w = w
+motion_require '../spec_helper'
 
 # Hooray for meta-testing.
 module MetaTests

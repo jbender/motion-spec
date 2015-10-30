@@ -1,12 +1,12 @@
-require File.expand_path('../../lib/mac_bacon', __FILE__)
+motion_require '../spec_helper'
 
 describe "#should shortcut for #it('should')" do
-  
+
   should "be called" do
     @called = true
     @called.should.be == true
   end
-  
+
   should "save some characters by typing should" do
     lambda { should.satisfy { 1 == 1 } }.should.not.raise
   end
@@ -18,7 +18,7 @@ describe "#should shortcut for #it('should')" do
   should "work nested" do
     should.satisfy {1==1}
   end
-  
+
   count = Bacon::Counter[:specifications]
   should "add new specifications" do
     # XXX this should +=1 but it's +=2

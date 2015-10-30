@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+motion_require '../spec_helper'
 
 class MockObservable
   attr_accessor :an_attribute
