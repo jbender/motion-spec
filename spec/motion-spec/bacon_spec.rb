@@ -392,7 +392,7 @@ end
 
 
 # TODO move to MacBacon specific spec?
-if Bacon.concurrent?
+if Bacon.method_defined?(:concurrent?) && Bacon.concurrent?
   describe "Concurrency" do
     it "returns that the specifications of the context should not be run on the main thread by default" do
       self.class.should.not.run_on_main_thread
