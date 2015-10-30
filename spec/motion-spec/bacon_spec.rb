@@ -24,7 +24,7 @@ module MetaTests
 end
 
 describe "Bacon" do
-  include MetaTests
+  before { include MetaTests }
 
   it "should have should.satisfy" do
     lambda { should.satisfy { 1 == 1 } }.should succeed
