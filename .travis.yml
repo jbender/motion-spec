@@ -3,3 +3,12 @@ language: objective-c
 osx_image: xcode7.1
 
 script: bundle exec rake spec
+
+deploy:
+  provider: rubygems
+  api_key:
+    secure: TkxLEf5WwpFSevhXXSKMgMU4itZ03sR2d3k6z0VPiDz1ieRIcCpdSkB5HtPb7qqR3uklFSHXLvJPLGoSMElA6V4iYWmX4vpIIu3RMSCBs5AjfbdbAr6w4KDiHhatDgD9m7p0iPV1r3Q/AHVtVCT4zrJP+GC9/rXXEwqM0j4fQLuCMuvMiikLck6Xk3/eYJuKoW2TfzHihB+b7rSuG3w55Y0Yej5u2GMakoJpm2jo8Iu5kdIWEWckb82zrXJZ//AefI0GsMmYFnndCaJC21Q+l3yTcuQ3q/0Ccql0O7fg+wWSKd8y7X3+vcpYCL+erGxRqyCz1+lfxWHPgSPYjRlXp7VhbAgOJV+n4oFvZw/uHNiUlmpiHytTVp6qAHMiT9yxg5yY3QltZHPCn9m5+xHDOw4apISVtMchoQnfrzX1g7QpBZfbRBgWpxLNcbF0VzBse0cKqfU1Z1NiWScp/dJp7hhqEEgHKjk9IIq4OWoUw2+HbsLf9lKScAoRhvdMIwg0PliQsySXgmlxtPehQFAyEsh6qMrxpqwqzeoLbfkOLU1MPO4Ob7e21ewoK886FoSZe1bQ6pnIFnkwY8jcyXgLRSNAy249Qz1N0tjl+olNsK7fXeHeaS0X4GIeWbBd4gFT5VTfLQPNLOzdzswUtrobWSviYPcbcKJssjAfOHvD4u4=
+  gem: motion-spec
+  on:
+    tags: true
+    repo: jbender/motion-spec
