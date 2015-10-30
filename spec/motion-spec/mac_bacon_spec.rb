@@ -205,54 +205,56 @@ describe "NSRunloop aware Bacon" do
   end
 end
 
-class WindowController < NSWindowController
-  attr_accessor :arrayController
-  attr_accessor :tableView
-  attr_accessor :textField
-end
-
-describe "Nib helper" do
-  self.run_on_main_thread = true
-
-  after do
-    @controller.close
-  end
-
-  def verify_outlets!
-    @controller.arrayController.should.be.instance_of NSArrayController
-    @controller.tableView.should.be.instance_of NSTableView
-    @controller.textField.should.be.instance_of NSTextField
-  end
-
-  it "takes a NIB path and instantiates the NIB with the given `owner' object" do
-    nib_path = File.expand_path("../fixtures/Window.nib", __FILE__)
-    @controller = WindowController.new
-    load_nib(nib_path, @controller)
-    verify_outlets!
-  end
-
-  it "also returns an array or other top level objects" do
-    nib_path = File.expand_path("../fixtures/Window.nib", __FILE__)
-    @controller = WindowController.new
-    top_level_objects = load_nib(nib_path, @controller).sort_by { |o| o.class.name }
-    top_level_objects[0].should.be.instance_of NSApplication
-    top_level_objects[1].should.be.instance_of NSArrayController
-    top_level_objects[2].should.be.instance_of NSWindow
-  end
-
-  it "converts a XIB to a tmp NIB before loading it and caches it" do
-    xib_path = File.expand_path("../fixtures/Window.xib", __FILE__)
-    @controller = WindowController.new
-    load_nib(xib_path, @controller)
-    verify_outlets!
-    @controller.close
-
-    def self.system(cmd)
-      raise "Oh noes! Tried to convert again!"
-    end
-
-    @controller = WindowController.new
-    load_nib(xib_path, @controller)
-    verify_outlets!
-  end
-end
+# We make no promises about NIBs for the moment
+#
+# class WindowController < NSWindowController
+#   attr_accessor :arrayController
+#   attr_accessor :tableView
+#   attr_accessor :textField
+# end
+#
+# describe "Nib helper" do
+#   self.run_on_main_thread = true
+#
+#   after do
+#     @controller.close
+#   end
+#
+#   def verify_outlets!
+#     @controller.arrayController.should.be.instance_of NSArrayController
+#     @controller.tableView.should.be.instance_of NSTableView
+#     @controller.textField.should.be.instance_of NSTextField
+#   end
+#
+#   it "takes a NIB path and instantiates the NIB with the given `owner' object" do
+#     nib_path = File.expand_path("../fixtures/Window.nib", __FILE__)
+#     @controller = WindowController.new
+#     load_nib(nib_path, @controller)
+#     verify_outlets!
+#   end
+#
+#   it "also returns an array or other top level objects" do
+#     nib_path = File.expand_path("../fixtures/Window.nib", __FILE__)
+#     @controller = WindowController.new
+#     top_level_objects = load_nib(nib_path, @controller).sort_by { |o| o.class.name }
+#     top_level_objects[0].should.be.instance_of NSApplication
+#     top_level_objects[1].should.be.instance_of NSArrayController
+#     top_level_objects[2].should.be.instance_of NSWindow
+#   end
+#
+#   it "converts a XIB to a tmp NIB before loading it and caches it" do
+#     xib_path = File.expand_path("../fixtures/Window.xib", __FILE__)
+#     @controller = WindowController.new
+#     load_nib(xib_path, @controller)
+#     verify_outlets!
+#     @controller.close
+#
+#     def self.system(cmd)
+#       raise "Oh noes! Tried to convert again!"
+#     end
+#
+#     @controller = WindowController.new
+#     load_nib(xib_path, @controller)
+#     verify_outlets!
+#   end
+# end
