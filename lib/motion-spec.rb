@@ -1,5 +1,5 @@
-require "motion-spec/version"
+# encoding: utf-8
 
-module MotionSpec
-  # Your code goes here...
-end
+require 'motion-require'
+
+Motion::Require.all(Dir.glob('motion-spec/**/*.rb'))
