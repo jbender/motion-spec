@@ -27,7 +27,7 @@ end
 
 describe "Bacon" do
   include MetaTests
-  
+
   it "should have should.satisfy" do
     lambda { should.satisfy { 1 == 1 } }.should succeed
     lambda { should.satisfy { 1 } }.should succeed
@@ -79,7 +79,7 @@ describe "Bacon" do
     ex.should.be.kind_of RuntimeError
     ex.message.should =~ /foo/
   end
-  
+
   it "should have should.be.an.instance_of" do
     lambda { "string".should.be.instance_of String }.should succeed
     lambda { "string".should.be.instance_of Hash }.should fail
@@ -132,7 +132,7 @@ describe "Bacon" do
         }.should.not.raise(RuntimeError, Comparable)
       }.should.raise ZeroDivisionError
     }.should succeed
-      
+
     lambda { lambda { raise "Error" }.should.not.raise }.should fail
   end
 
@@ -176,7 +176,7 @@ describe "Bacon" do
     lambda { 5.should.respond_to :to_str }.should fail
     lambda { :foo.should.respond_to :nx }.should fail
   end
-  
+
   it "should have should.be.close" do
     lambda { 1.4.should.be.close 1.4, 0 }.should succeed
     # TODO this one is disabled because it will probably never run on MacRuby.
@@ -274,40 +274,40 @@ describe "before/after" do
   after do
     @a.should.equal 3
   end
-  
+
   it "should run in the right order" do
     @a.should.equal 2
     @b.should.equal 2
   end
-  
+
   describe "when nested" do
     before do
       @c = 5
     end
-    
+
     it "should run from higher level" do
       @a.should.equal 2
       @b.should.equal 2
     end
-    
+
     it "should run at the nested level" do
       @c.should.equal 5
     end
-    
+
     before do
       @a = 5
     end
-    
+
     it "should run in the right order" do
       @a.should.equal 5
       @a = 2
     end
   end
-  
+
   it "should not run from lower level" do
     @c.should.be.nil
   end
-  
+
   describe "when nested at a sibling level" do
     it "should not run from sibling level" do
       @c.should.be.nil
