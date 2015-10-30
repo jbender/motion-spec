@@ -1,10 +1,14 @@
 # MotionSpec
 [![Build Status](https://img.shields.io/travis/jbender/motion-spec/master.svg)](https://travis-ci.org/jbender/motion-spec)
+![MIT Licensed](https://img.shields.io/github/license/jbender/motion-spec.svg)
 [![Dependency Status](https://img.shields.io/gemnasium/jbender/motion-spec.svg)](https://gemnasium.com/jbender/motion-spec)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/motion/spec`. To experiment with that code, run `bin/console` for an interactive prompt.
+Specs are important! This project makes them a first-class citizen again.
 
-TODO: Delete this and the text above, and describe your gem
+RubyMotion is great at integrating them from the start, but
+they aren't core to the RubyMotion workflow, and lag behind their distant
+`rspec` cousin (RubyMotion's specs are forked from `MacBacon`, which is a port
+of `bacon` which is a simplified version of `rspec`).
 
 ## Installation
 
@@ -26,17 +30,7 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/motion-spec.
-
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/jbender/motion-spec.
