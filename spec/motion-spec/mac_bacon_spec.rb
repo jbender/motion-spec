@@ -29,16 +29,14 @@ describe "NSRunloop aware Bacon" do
       resume
     end
 
+    def delegateCallbackTookTooLongMethod
+      raise "Oh noes, I must never be called!"
+    end
+
     it "allows the user to postpone execution of a block until Context#resume is called, from for instance a delegate callback" do
       performSelector('delegateCallbackMethod', withObject:nil, afterDelay:0.1)
       @delegateCallbackCalled.should == nil
-      wait do
-        @delegateCallbackCalled.should == true
-      end
-    end
-
-    def delegateCallbackTookTooLongMethod
-      raise "Oh noes, I must never be called!"
+      wait { @delegateCallbackCalled.should == true }
     end
 
     ## This spec adds a failure to the ErrorLog!
@@ -70,12 +68,11 @@ describe "NSRunloop aware Bacon" do
     end
 
     it "resumes the postponed block once an observed value changes" do
-      performSelector('triggerChange', withObject:nil, afterDelay:0)
       value = nil
+      performSelector('triggerChange', withObject:nil, afterDelay:0)
       wait_for_change @observable, 'an_attribute' do
-        value = @observable.an_attribute
+        @observable.an_attribute.should == 'changed'
       end
-      value.should == 'changed'
     end
 
     ## This spec adds a failure to the ErrorLog!
