@@ -5,7 +5,7 @@ require 'motion-require'
 Motion::Require.all(Dir.glob('motion-spec/**/*.rb'))
 
 # Do not log all exceptions when running the specs.
-Exception.log_exceptions = false
+Exception.log_exceptions = false if Exception.respond_to? :log_exceptions
 
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&
