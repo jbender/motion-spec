@@ -410,11 +410,12 @@ describe "delegate callbacks" do
     def bacon_specification_did_finish(spec)
       @finished = spec
     end
+
     at_exit do
-      unless @finished == @specification
-        puts
-        raise "Expected the delegate to be called after a spec hash finished, but it didn't."
-      end
+      return if @finished == @specification
+
+      puts
+      raise "Expected the delegate to be called after a spec hash finished, but it didn't."
     end
   end
 
@@ -422,15 +423,17 @@ describe "delegate callbacks" do
     # just to make the spec pass
     true.should == true
 
-    Bacon.delegate = self
+    Bacon.delegate = self if Bacon.respond_to? :delegate
+
     def bacon_did_finish
       @bacon_finished = true
     end
+
     at_exit do
-      unless @bacon_finished
-        puts
-        raise "Expected the delegate to be called after all specs have finished, but it didn't."
-      end
+      return if @bacon_finished
+
+      puts
+      raise "Expected the delegate to be called after all specs have finished, but it didn't."
     end
   end
 end

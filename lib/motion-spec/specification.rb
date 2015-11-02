@@ -1,5 +1,8 @@
 module Bacon
   class Specification
+    MULTIPLE_POSTPONES_ERROR_MESSAGE =
+      "Only one indefinite `wait' block at the same time is allowed!"
+
     attr_reader :description
 
     def initialize(context, description, block, before_filters, after_filters)
@@ -58,40 +61,40 @@ module Bacon
 
     def postpone_block(timeout = 1, &block)
       # If an exception occurred, we definitely don't need to schedule any more blocks
-      unless @exception_occurred
-        if @postponed_block
-          raise "Only one indefinite `wait' block at the same time is allowed!"
-        else
-          @postponed_blocks_count += 1
-          @postponed_block = block
-          unless Platform.android?
-            performSelector("postponed_block_timeout_exceeded", withObject:nil, afterDelay:timeout)
-          else
-            sleep timeout
-            postponed_block_timeout_exceeded
-          end
-        end
-      end
+      return if @exception_occurred
+      raise MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
+
+      @postponed_blocks_count += 1
+      @postponed_block = block
+
+      return performSelector(
+        "postponed_block_timeout_exceeded",
+        withObject:nil,
+        afterDelay:timeout
+      ) unless Platform.android?
+
+      sleep timeout
+      postponed_block_timeout_exceeded
     end
 
     def postpone_block_until_change(object_to_observe, key_path, timeout = 1, &block)
       # If an exception occurred, we definitely don't need to schedule any more blocks
-      unless @exception_occurred
-        if @postponed_block
-          raise "Only one indefinite `wait' block at the same time is allowed!"
-        else
-          @postponed_blocks_count += 1
-          @postponed_block = block
-          @observed_object_and_key_path = [object_to_observe, key_path]
-          object_to_observe.addObserver(self, forKeyPath:key_path, options:0, context:nil)
-          unless Platform.android?
-            performSelector("postponed_change_block_timeout_exceeded", withObject:nil, afterDelay:timeout)
-          else
-            sleep timeout
-            postponed_change_block_timeout_exceeded
-          end
-        end
-      end
+      return if @exception_occurred
+      raise MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
+
+      @postponed_blocks_count += 1
+      @postponed_block = block
+      @observed_object_and_key_path = [object_to_observe, key_path]
+      object_to_observe.addObserver(self, forKeyPath:key_path, options:0, context:nil)
+
+      return performSelector(
+        "postponed_change_block_timeout_exceeded",
+        withObject:nil,
+        afterDelay:timeout
+      ) unless Platform.android?
+
+      sleep timeout
+      postponed_change_block_timeout_exceeded
     end
 
     def observeValueForKeyPath(key_path, ofObject:object, change:_, context:__)

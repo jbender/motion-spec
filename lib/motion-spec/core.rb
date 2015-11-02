@@ -11,6 +11,8 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 module Bacon
+  DEFAULT_OUTPUT_MODULE = MotionSpec::SpecDoxOutput
+
   Counter = Hash.new(0)
   ErrorLog = ""
   Shared = Hash.new { |_, name|
@@ -46,7 +48,7 @@ module Bacon
 
   def self.run(arg=nil)
     unless respond_to?(:handle_specification_begin)
-      extend(Outputs[ENV['output']] || MotionSpec::SpecDoxOutput)
+      extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
     end
 
     @timer ||= Time.now
@@ -57,15 +59,21 @@ module Bacon
     else
       @main_activity ||= arg
 
-      @contexts.each do |context|
-        Counter[:context_depth] += 1
-        handle_specification_begin(context.name)
-        context.run
-        handle_specification_end
-        Counter[:context_depth] -= 1
-      end
+      @contexts.each { |context| execute_context(context) }
       handle_summary
     end
+  end
+
+  def self.execute_context(context)
+    unless respond_to?(:handle_specification_begin)
+      extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
+    end
+
+    Counter[:context_depth] += 1
+    handle_specification_begin(context.name)
+    context.run
+    handle_specification_end
+    Counter[:context_depth] -= 1
   end
 
   # Android-only.

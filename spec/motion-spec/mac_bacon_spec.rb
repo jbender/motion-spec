@@ -63,9 +63,7 @@ describe "NSRunloop aware Bacon" do
   end
 
   describe "concerning `wait_for_change'" do
-    before do
-      @observable = MockObservable.new
-    end
+    before { @observable = MockObservable.new }
 
     def triggerChange
       @observable.an_attribute = 'changed'

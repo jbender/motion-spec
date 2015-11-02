@@ -18,18 +18,14 @@ module Bacon
       # TODO
       #return  unless name =~ RestrictContext
 
-      unless Platform.android?
-        if spec = current_specification
-          spec.performSelector("run", withObject:nil, afterDelay:0)
-        else
-          Bacon.context_did_finish(self)
-        end
+      if Platform.android?
+        @specifications.each { |spec| spec.run }
       else
-        @specifications.each do |spec|
-          spec.run
-        end
-        Bacon.context_did_finish(self)
+        spec = current_specification
+        return spec.performSelector("run", withObject:nil, afterDelay:0) if spec
       end
+
+      Bacon.context_did_finish(self)
     end
 
     def current_specification
@@ -71,12 +67,10 @@ module Bacon
 
     def describe(*args, &block)
       context = Bacon::Context.new(args.join(' '), @before, @after, &block)
+
       # FIXME: fix RM-879 and RM-806
-      unless Platform.android?
-        (parent_context = self).methods(false).each {|e|
-          class<<context; self end.send(:define_method, e) {|*args| parent_context.send(e, *args)}
-        }
-      end
+      evaluate_ios_context unless Platform.android?
+
       context
     end
 
@@ -93,7 +87,12 @@ module Bacon
     end
 
     def wait_for_change(object_to_observe, key_path, timeout = 1, &block)
-      current_specification.postpone_block_until_change(object_to_observe, key_path, timeout, &block)
+      current_specification.postpone_block_until_change(
+        object_to_observe,
+        key_path,
+        timeout,
+        &block
+      )
     end
 
     def resume
@@ -107,6 +106,20 @@ module Bacon
     alias_method :context, :describe
 
     # Android-only.
-    def main_activity; Bacon.main_activity; end
+    def main_activity
+      Bacon.main_activity
+    end
+
+    private
+
+    def evaluate_ios_context
+      (parent_context = self).methods(false).each do |e|
+        class << context
+          self
+        end.send(:define_method, e) do |*args|
+          parent_context.send(e, *args)
+        end
+      end
+    end
   end
 end
