@@ -32,12 +32,6 @@ module Bacon
     'colorized' => MotionSpec::ColorizedOutput,
   }
 
-  class Platform
-    def self.android?
-      defined?(NSObject) ? false : true
-    end
-  end
-
   def self.add_context(context)
     (@contexts ||= []) << context
   end
