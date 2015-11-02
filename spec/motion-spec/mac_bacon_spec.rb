@@ -42,24 +42,24 @@ describe "NSRunloop aware Bacon" do
     end
 
     ## This spec adds a failure to the ErrorLog!
-    #it "has a default timeout of 1 second after which the spec will fail and further scheduled calls to the Context are cancelled" do
-      #expect_spec_to_fail!
-      #performSelector('delegateCallbackTookTooLongMethod', withObject:nil, afterDelay:1.2)
-      #wait do
-        ## we must never arrive here, because the default timeout of 1 second will have passed
-        #raise "Oh noes, we shouldn't have arrived in this postponed block!"
-      #end
-    #end
+    # it "has a default timeout of 1 second after which the spec will fail and further scheduled calls to the Context are cancelled" do
+    #   expect_spec_to_fail!
+    #   performSelector('delegateCallbackTookTooLongMethod', withObject:nil, afterDelay:1.2)
+    #   wait do
+    #     # we must never arrive here, because the default timeout of 1 second will have passed
+    #     raise "Oh noes, we shouldn't have arrived in this postponed block!"
+    #   end
+    # end
 
     ## This spec adds a failure to the ErrorLog!
-    #it "takes an explicit timeout" do
-      #expect_spec_to_fail!
-      #performSelector('delegateCallbackTookTooLongMethod', withObject:nil, afterDelay:0.8)
-      #wait_max 0.3 do
-        ## we must never arrive here, because the default timeout of 1 second will have passed
-        #raise "Oh noes, we shouldn't have arrived in this postponed block!"
-      #end
-    #end
+    # it "takes an explicit timeout" do
+    #   expect_spec_to_fail!
+    #   performSelector('delegateCallbackTookTooLongMethod', withObject:nil, afterDelay:0.8)
+    #   wait_max 0.3 do
+    #     # we must never arrive here, because the default timeout of 1 second will have passed
+    #     raise "Oh noes, we shouldn't have arrived in this postponed block!"
+    #   end
+    # end
   end
 
   describe "concerning `wait_for_change'" do
@@ -81,30 +81,30 @@ describe "NSRunloop aware Bacon" do
     end
 
     ## This spec adds a failure to the ErrorLog!
-    #it "has a default timeout of 1 second" do
-      #expect_spec_to_fail!
-      #wait_for_change(@observable, 'an_attribute') do
-        #raise "Oh noes, I must never be called!"
-      #end
-      #performSelector('triggerChange', withObject:nil, afterDelay:1.1)
-      #wait 1.2 do
-        ## we must never arrive here, because the default timeout of 1 second will have passed
-        #raise "Oh noes, we shouldn't have arrived in this postponed block!"
-      #end
-    #end
+    # it "has a default timeout of 1 second" do
+    #   expect_spec_to_fail!
+    #   wait_for_change(@observable, 'an_attribute') do
+    #     raise "Oh noes, I must never be called!"
+    #   end
+    #   performSelector('triggerChange', withObject:nil, afterDelay:1.1)
+    #   wait 1.2 do
+    #     # we must never arrive here, because the default timeout of 1 second will have passed
+    #     raise "Oh noes, we shouldn't have arrived in this postponed block!"
+    #   end
+    # end
 
     ## This spec adds a failure to the ErrorLog!
-    #it "takes an explicit timeout" do
-      #expect_spec_to_fail!
-      #wait_for_change(@observable, 'an_attribute', 0.3) do
-        #raise "Oh noes, I must never be called!"
-      #end
-      #performSelector('triggerChange', withObject:nil, afterDelay:0.8)
-      #wait 0.9 do
-        ## we must never arrive here, because the default timeout of 1 second will have passed
-        #raise "Oh noes, we shouldn't have arrived in this postponed block!"
-      #end
-    #end
+    # it "takes an explicit timeout" do
+    #   expect_spec_to_fail!
+    #   wait_for_change(@observable, 'an_attribute', 0.3) do
+    #     raise "Oh noes, I must never be called!"
+    #   end
+    #   performSelector('triggerChange', withObject:nil, afterDelay:0.8)
+    #   wait 0.9 do
+    #     # we must never arrive here, because the default timeout of 1 second will have passed
+    #     raise "Oh noes, we shouldn't have arrived in this postponed block!"
+    #   end
+    # end
   end
 
   describe "postponing blocks should work from before/after filters as well" do
