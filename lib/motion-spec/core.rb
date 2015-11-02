@@ -32,15 +32,6 @@ module Bacon
     'colorized' => MotionSpec::ColorizedOutput,
   }
 
-  class Error < RuntimeError
-    attr_accessor :count_as
-
-    def initialize(count_as, message)
-      @count_as = count_as
-      super message
-    end
-  end
-
   class Platform
     def self.android?
       defined?(NSObject) ? false : true
