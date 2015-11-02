@@ -1,30 +1,24 @@
 motion_require '../spec_helper'
 
-# Hooray for meta-testing.
-module MetaTests
+describe "Bacon" do
+
   def succeed
-    lambda { |block|
+    lambda do |block|
       block.should.not.raise Bacon::Error
       true
-    }
+    end
   end
 
   def fail
-    lambda { |block|
+    lambda do |block|
       block.should.raise Bacon::Error
       true
-    }
+    end
   end
 
   def equal_string(x)
-    lambda { |s|
-      x == s.to_s
-    }
+    lambda { |s| x == s.to_s }
   end
-end
-
-describe "Bacon" do
-  before { include MetaTests }
 
   it "should have should.satisfy" do
     lambda { should.satisfy { 1 == 1 } }.should succeed
@@ -361,7 +355,7 @@ end
 
 describe 'describe arguments' do
   def check(ctx, name)
-    ctx.ancestors.should.include Bacon::Context
+    ctx.class.ancestors.should.include Bacon::Context
     ctx.instance_variable_get('@name').should == name
   end
 
