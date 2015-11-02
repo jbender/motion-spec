@@ -723,7 +723,6 @@ module Kernel
 end
 
 class Should
-  puts 'loaded Should class'
   # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
   # kind_of?, nil?, respond_to?, tainted?
   instance_methods.each { |name| undef_method name  if name =~ /\?|^\W+$/ }
@@ -789,20 +788,5 @@ class Should
 
   def flunk(reason="Flunked")
     raise Bacon::Error.new(:failed, reason)
-  end
-end
-
-# Do not log all exceptions when running the specs.
-Exception.log_exceptions = false
-
-# FIXME : Need better detection for iPhone Simulator
-if defined?(UIDevice) && UIDevice.respond_to?("currentDevice") && !UIDevice.currentDevice.name =~ /(iPhone|iPad) Simulator/
-  module Kernel
-    def puts(*args)
-      NSLog(args.join("\n"))
-    end
-    def print(*args)
-      puts *args # TODO
-    end
   end
 end
