@@ -1,0 +1,12 @@
+---
+engines:
+  rubymotion:
+    enabled: true
+  rubocop:
+    enabled: true
+  bundler-audit:
+    enabled: true
+ratings:
+  paths:
+    - "**.rb"
+    - Gemfile.lock

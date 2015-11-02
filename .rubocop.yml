@@ -1,0 +1,45 @@
+# Disable all checks not explicitly referenced in this file
+# This is used to easily disable Style/* checks
+AllCops:
+  DisabledByDefault: true
+  Lint: true
+  Metrics: true
+  Performance: true
+  Rails: false
+  Style: true
+
+##########################################################
+Metrics/AbcSize:
+  Description: >-
+                 A calculated magnitude based on number of assignments,
+                 branches, and conditions.
+  Reference: 'http://c2.com/cgi/wiki?AbcMetric'
+  Enabled: true
+  Max: 25
+
+Metrics/BlockNesting:
+  Description: 'Avoid excessive block nesting'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#three-is-the-number-thou-shalt-count'
+  Enabled: true
+  Max: 4
+
+Metrics/ClassLength:
+  Description: 'Avoid classes longer than 100 lines of code.'
+  Enabled: true
+  Max: 100
+
+Metrics/ModuleLength:
+  Description: 'Avoid modules longer than 100 lines of code.'
+  Enabled: true
+  Max: 100
+
+Metrics/MethodLength:
+  Description: 'Avoid methods longer than 20 lines of code.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#short-methods'
+  Enabled: false
+  Max: 10
+
+Metrics/ParameterLists:
+  Description: 'Avoid parameter lists longer than three or four parameters.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#too-many-params'
+  Enabled: false
