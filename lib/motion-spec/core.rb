@@ -52,16 +52,17 @@ module Bacon
     end
 
     @timer ||= Time.now
-    unless Platform.android?
-      Counter[:context_depth] += 1
-      handle_specification_begin(current_context.name)
-      current_context.performSelector("run", withObject:nil, afterDelay:0)
-    else
+
+    if Platform.android?
       @main_activity ||= arg
 
       @contexts.each { |context| execute_context(context) }
-      handle_summary
+      return handle_summary
     end
+
+    Counter[:context_depth] += 1
+    handle_specification_begin(current_context.name)
+    current_context.performSelector("run", withObject:nil, afterDelay:0)
   end
 
   def self.execute_context(context)
@@ -82,21 +83,18 @@ module Bacon
   end
 
   def self.context_did_finish(context)
-    unless Platform.android?
-      handle_specification_end
-      Counter[:context_depth] -= 1
-      if (@current_context_index + 1) < @contexts.size
-        @current_context_index += 1
-        run
-      else
-        # DONE
-        handle_summary
-        unless Platform.android?
-          exit(Counter.values_at(:failed, :errors).inject(:+))
-        else
-          # In Android there is no need to exit as we terminate the activity right after Bacon.
-        end
-      end
+    return if Platform.android?
+
+    handle_specification_end
+
+    Counter[:context_depth] -= 1
+
+    if (@current_context_index + 1) < @contexts.size
+      @current_context_index += 1
+      return run
     end
+
+    handle_summary
+    exit(Counter.values_at(:failed, :errors).inject(:+))
   end
 end

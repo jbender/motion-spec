@@ -324,9 +324,7 @@ describe "shared/behaves_like" do
 
   ctx = self
   it "raises NameError when the context is not found" do
-    lambda {
-      ctx.behaves_like "whoops"
-    }.should.raise NameError
+    lambda { ctx.behaves_like "whoops" }.should.raise NameError
   end
 
   behaves_like "a shared context"
@@ -381,59 +379,5 @@ describe 'describe arguments' do
 
   it "prefixes the name of a nested context with that of the parent context" do
     check(describe('are nested') {}, 'describe arguments are nested')
-  end
-end
-
-describe "delegate callbacks" do
-  def initialize(spec)
-    super(spec)
-    spec.delegate = self
-  end
-
-  def bacon_specification_will_start(spec)
-    @started = spec
-  end
-
-  before do
-    # The callback should have been called even before the `before' filter
-    @started.should == @specification
-  end
-
-  it "notifies before a spec starts" do
-    @started.should == @specification
-  end
-
-  it "notifies after a spec has finished" do
-    # just to make the spec pass
-    true.should == true
-
-    def bacon_specification_did_finish(spec)
-      @finished = spec
-    end
-
-    at_exit do
-      return if @finished == @specification
-
-      puts
-      raise "Expected the delegate to be called after a spec hash finished, but it didn't."
-    end
-  end
-
-  it "notifies after all specs have run" do
-    # just to make the spec pass
-    true.should == true
-
-    Bacon.delegate = self if Bacon.respond_to? :delegate
-
-    def bacon_did_finish
-      @bacon_finished = true
-    end
-
-    at_exit do
-      return if @bacon_finished
-
-      puts
-      raise "Expected the delegate to be called after all specs have finished, but it didn't."
-    end
   end
 end
