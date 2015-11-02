@@ -10,8 +10,7 @@ describe "NSRunloop aware Bacon" do
       started_at_1 = started_at_2 = started_at_3 = Time.now
       #number_of_specs_before = Bacon::Counter[:specifications]
 
-      wait 0.5
-      (Time.now - started_at_1).should.be.close(0.5, 0.5)
+      wait 0.5 { (Time.now - started_at_1).should.be.close(0.5, 0.5) }
 
       wait 1 do
         (Time.now - started_at_2).should.be.close(1.5, 0.5)
