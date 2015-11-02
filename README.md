@@ -9,7 +9,7 @@ Specs are important! This project makes them a first-class citizen again.
 RubyMotion is great at integrating them from the start, but
 they aren't core to the RubyMotion workflow, and lag behind their distant
 `rspec` cousin (RubyMotion's specs are forked from `MacBacon`, which is a port
-of `bacon` which is a simplified version of `rspec`).
+of `Bacon` which is a simplified version of `rspec`).
 
 ## Installation
 
