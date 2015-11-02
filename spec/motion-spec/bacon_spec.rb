@@ -390,52 +390,6 @@ describe 'describe arguments' do
   end
 end
 
-
-# TODO move to MacBacon specific spec?
-if Bacon.method_defined?(:concurrent?) && Bacon.concurrent?
-  describe "Concurrency" do
-    it "returns that the specifications of the context should not be run on the main thread by default" do
-      self.class.should.not.run_on_main_thread
-    end
-
-    describe ", concerning disabling per context, " do
-      self.run_on_main_thread = true
-
-      class << self
-        attr_accessor :ran_specs
-      end
-      self.ran_specs = []
-
-      after do
-        self.class.ran_specs << self.specification
-      end
-
-      it "runs the specs sequentially (part 1)" do
-        self.class.ran_specs.size.should == 0
-      end
-
-      it "forces the specifications to run on the main thread" do
-        Dispatch::Queue.current.to_s.should == Dispatch::Queue.main.to_s
-      end
-
-      it "runs the specs sequentially (part 2)" do
-        self.class.ran_specs.size.should == 2
-      end
-    end
-  end
-else
-  puts "[!] Skipping the majority of the concurrency related specs, as Bacon is not running in concurrent mode. Enable it with the `-c' command-line option."
-  describe "Concurrency" do
-    it "returns that the specifications of the context should be run on the main thread by default" do
-      self.class.should.run_on_main_thread
-    end
-
-    it "forces the specifications to run on the main thread" do
-      Dispatch::Queue.current.to_s.should == Dispatch::Queue.main.to_s
-    end
-  end
-end
-
 describe "delegate callbacks" do
   def initialize(spec)
     super(spec)
