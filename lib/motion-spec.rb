@@ -8,9 +8,9 @@ Motion::Require.all(Dir.glob('motion-spec/**/*.rb'))
 Exception.log_exceptions = false
 
 # FIXME : Need better detection for iPhone Simulator
-if defined?(UIDevice)
-  && UIDevice.respond_to?("currentDevice")
-  && !UIDevice.currentDevice.name =~ /(iPhone|iPad) Simulator/
+if defined?(UIDevice) &&
+  UIDevice.respond_to?("currentDevice") &&
+  !UIDevice.currentDevice.name =~ /(iPhone|iPad) Simulator/
 
   module Kernel
     def puts(*args)
