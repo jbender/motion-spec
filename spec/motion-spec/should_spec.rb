@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 motion_require '../spec_helper'
 
 describe "#should shortcut for #it('should')" do

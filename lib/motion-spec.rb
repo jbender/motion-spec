@@ -1,4 +1,4 @@
-# encoding: utf-8
+# -*- encoding : utf-8 -*-
 unless defined?(Motion::Project::Config)
   raise "The MotionSpec gem must be required within a RubyMotion project Rakefile."
 end

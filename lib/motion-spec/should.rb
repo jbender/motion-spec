@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Should
   # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
   # kind_of?, nil?, respond_to?, tainted?

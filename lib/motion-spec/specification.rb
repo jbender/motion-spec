@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Motion
   module Spec
     class Specification

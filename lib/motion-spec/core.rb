@@ -1,4 +1,4 @@
-# encoding: utf-8
+# -*- encoding : utf-8 -*-
 # MotionSpec is built off of MacBacon, which is derived from Bacon, which is a
 # micro-port of Rspec. See the LICENSE for core contributors and copyright years
 
