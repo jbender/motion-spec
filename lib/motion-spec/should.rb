@@ -1,7 +1,7 @@
 class Should
   # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
   # kind_of?, nil?, respond_to?, tainted?
-  instance_methods.each { |name| undef_method name  if name =~ /\?|^\W+$/ }
+  # instance_methods.each { |name| undef_method name  if name =~ /\?|^\W+$/ }
 
   def initialize(object)
     @object = object
@@ -11,26 +11,23 @@ class Should
   def not(*args, &block)
     @negated = !@negated
 
-    if args.empty?
-      self
-    else
-      be(*args, &block)
-    end
+    return self if args.empty?
+
+    be(*args, &block)
   end
 
   def be(*args, &block)
-    if args.empty?
-      self
-    else
-      block = args.shift  unless block_given?
-      satisfy(*args, &block)
-    end
-  end
+    return self if args.empty?
 
-  alias a  be
-  alias an be
+    block = args.shift unless block_given?
+    satisfy(*args, &block)
+  end
+  alias_method :a,  :be
+  alias_method :an, :be
 
   def satisfy(*args, &block)
+    p args
+
     if args.size == 1 && String === args.first
       description = args.shift
     else
@@ -38,9 +35,9 @@ class Should
     end
 
     r = yield(@object, *args)
-    if Bacon::Counter[:depth] > 0
-      Bacon::Counter[:requirements] += 1
-      raise Bacon::Error.new(:failed, description)  unless @negated ^ r
+    if Motion::Spec::Counter[:depth] > 0
+      Motion::Spec::Counter[:requirements] += 1
+      raise Motion::Spec::Error.new(:failed, description)  unless @negated ^ r
       r
     else
       @negated ? !r : !!r
@@ -57,12 +54,21 @@ class Should
     satisfy(desc) { |x| x.__send__(name, *args, &block) }
   end
 
-  def equal(value)         self == value      end
-  def match(value)         self =~ value      end
-  def identical_to(value)  self.equal? value  end
-  alias same_as identical_to
+  def equal(value)
+    self == value
+  end
+  alias_method :eq, :equal
+
+  def match(value)
+    self =~ value
+  end
+
+  def identical_to(value)
+    self.equal? value
+  end
+  alias_method :same_as, :identical_to
 
   def flunk(reason="Flunked")
-    raise Bacon::Error.new(:failed, reason)
+    raise Motion::Spec::Error.new(:failed, reason)
   end
 end

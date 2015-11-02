@@ -8,7 +8,7 @@ describe "NSRunloop aware Bacon" do
   describe "concerning `wait' with a fixed time" do
     it "allows the user to postpone execution of a block for n seconds, which will halt any further execution of specs" do
       started_at_1 = started_at_2 = started_at_3 = Time.now
-      #number_of_specs_before = Bacon::Counter[:specifications]
+      #number_of_specs_before = Motion::Spec::Counter[:specifications]
 
       wait 0.5 { (Time.now - started_at_1).should.be.close(0.5, 0.5) }
 
@@ -16,7 +16,7 @@ describe "NSRunloop aware Bacon" do
         (Time.now - started_at_2).should.be.close(1.5, 0.5)
         wait 1.5 do
           (Time.now - started_at_3).should.be.close(3, 0.5)
-          #Bacon::Counter[:specifications].should == number_of_specs_before
+          #Motion::Spec::Counter[:specifications].should.eq number_of_specs_before
         end
       end
     end
@@ -34,8 +34,8 @@ describe "NSRunloop aware Bacon" do
 
     it "allows the user to postpone execution of a block until Context#resume is called, from for instance a delegate callback" do
       performSelector('delegateCallbackMethod', withObject:nil, afterDelay:0.1)
-      @delegateCallbackCalled.should == nil
-      wait { @delegateCallbackCalled.should == true }
+      @delegateCallbackCalled.should.eq nil
+      wait { @delegateCallbackCalled.should.eq true }
     end
 
     ## This spec adds a failure to the ErrorLog!
@@ -70,7 +70,7 @@ describe "NSRunloop aware Bacon" do
       value = nil
       performSelector('triggerChange', withObject:nil, afterDelay:0)
       wait_for_change @observable, 'an_attribute' do
-        @observable.an_attribute.should == 'changed'
+        @observable.an_attribute.should.eq 'changed'
       end
     end
 

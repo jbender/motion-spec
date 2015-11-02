@@ -4,14 +4,14 @@ describe "Bacon" do
 
   def succeed
     lambda do |block|
-      block.should.not.raise Bacon::Error
+      block.should.not.raise Motion::Spec::Error
       true
     end
   end
 
   def fail
     lambda do |block|
-      block.should.raise Bacon::Error
+      block.should.raise Motion::Spec::Error
       true
     end
   end
@@ -33,9 +33,9 @@ describe "Bacon" do
   end
 
   it "should have should.equal" do
-    lambda { "string1".should == "string1" }.should succeed
-    lambda { "string1".should == "string2" }.should fail
-    lambda { "1".should == 1 }.should fail
+    lambda { "string1".should.eq "string1" }.should succeed
+    lambda { "string1".should.eq "string2" }.should fail
+    lambda { "1".should.eq 1 }.should fail
 
     lambda { "string1".should.equal "string1" }.should succeed
     lambda { "string1".should.equal "string2" }.should fail
@@ -49,9 +49,7 @@ describe "Bacon" do
     lambda { lambda { raise "Error" }.should.not.raise(RuntimeError) }.should fail
 
     lambda { lambda { 1 + 1 }.should.raise }.should fail
-    lambda {
-      lambda { raise "Error" }.should.raise(Interrupt)
-    }.should.raise
+    lambda { lambda { raise "Error" }.should.raise(Interrupt) }.should.raise
   end
 
   it "should have should.raise with a block" do
@@ -61,9 +59,7 @@ describe "Bacon" do
     lambda { should.not.raise(RuntimeError) { raise "Error" } }.should fail
 
     lambda { should.raise { 1 + 1 } }.should fail
-    lambda {
-      should.raise(Interrupt) { raise "Error" }
-    }.should.raise
+    lambda { should.raise(Interrupt) { raise "Error" } }.should.raise
   end
 
   it "should have a should.raise should return the exception" do
@@ -141,8 +137,8 @@ describe "Bacon" do
   end
 
   it "should have should.not.equal" do
-    lambda { "string1".should.not == "string2" }.should succeed
-    lambda { "string1".should.not == "string1" }.should fail
+    lambda { "string1".should.not.eq "string2" }.should succeed
+    lambda { "string1".should.not.eq "string1" }.should fail
   end
 
   it "should have should.not.match" do
@@ -220,11 +216,11 @@ describe "Bacon" do
     lambda { 2.should.be <= 2 }.should succeed
     lambda { 2.should.be <= 2.1 }.should succeed
 
-    lambda { Array.should === [1,2,3] }.should succeed
-    lambda { Integer.should === [1,2,3] }.should fail
+    lambda { Array.should.eq= [1,2,3] }.should succeed
+    lambda { Integer.should.eq= [1,2,3] }.should fail
 
-    lambda { /foo/.should === "foobar" }.should succeed
-    lambda { "foobar".should === /foo/ }.should fail
+    lambda { /foo/.should.eq= "foobar" }.should succeed
+    lambda { "foobar".should.eq= /foo/ }.should fail
   end
 
   it "should allow for custom shoulds" do
@@ -341,20 +337,20 @@ describe "Methods" do
   end
 
   it "should be accessible in a test" do
-    the_meaning_of_life.should == 42
+    the_meaning_of_life.should.eq 42
   end
 
   describe "when in a sibling context" do
     it "should be accessible in a test" do
-      the_meaning_of_life.should == 42
+      the_meaning_of_life.should.eq 42
     end
   end
 end
 
 describe 'describe arguments' do
   def check(ctx, name)
-    ctx.class.ancestors.should.include Bacon::Context
-    ctx.instance_variable_get('@name').should == name
+    ctx.class.ancestors.should.include Motion::Spec::Context
+    ctx.instance_variable_get('@name').should.eq name
   end
 
   it 'should work with string' do
@@ -370,11 +366,11 @@ describe 'describe arguments' do
   end
 
   it 'should work with namespaced modules' do
-    check(Kernel.send(:describe, Bacon::Context) {}, 'Bacon::Context')
+    check(Kernel.send(:describe, Motion::Spec::Context) {}, 'Motion::Spec::Context')
   end
 
   it 'should work with multiple arguments' do
-    check(Kernel.send(:describe, Bacon::Context, :empty) {}, 'Bacon::Context empty')
+    check(Kernel.send(:describe, Motion::Spec::Context, :empty) {}, 'Motion::Spec::Context empty')
   end
 
   it "prefixes the name of a nested context with that of the parent context" do
