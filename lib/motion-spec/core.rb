@@ -2,93 +2,91 @@
 # MotionSpec is built off of MacBacon, which is derived from Bacon, which is a
 # micro-port of Rspec. See the LICENSE for core contributors and copyright years
 
-module Motion
-  module Spec
-    DEFAULT_OUTPUT_MODULE = SpecDoxOutput
+module MotionSpec
+  DEFAULT_OUTPUT_MODULE = SpecDoxOutput
 
-    Counter = Hash.new(0)
-    ErrorLog = ""
-    Shared = Hash.new { |_, name|
-      raise NameError, "no such context: #{name.inspect}"
-    }
+  Counter = Hash.new(0)
+  ErrorLog = ""
+  Shared = Hash.new { |_, name|
+    raise NameError, "no such context: #{name.inspect}"
+  }
 
-    RestrictName    = //  unless defined? RestrictName
-    RestrictContext = //  unless defined? RestrictContext
+  RestrictName    = //  unless defined? RestrictName
+  RestrictContext = //  unless defined? RestrictContext
 
-    Backtraces = true  unless defined? Backtraces
+  Backtraces = true  unless defined? Backtraces
 
-    Outputs = {
-      'spec_dox' => SpecDoxOutput,
-      'fast' => FastOutput,
-      'test_unit' => TestUnitOutput,
-      'tap' => TapOutput,
-      'knock' => KnockOutput,
-      'rubymine' => RubyMineOutput,
-      'colorized' => ColorizedOutput,
-    }
+  Outputs = {
+    'spec_dox' => SpecDoxOutput,
+    'fast' => FastOutput,
+    'test_unit' => TestUnitOutput,
+    'tap' => TapOutput,
+    'knock' => KnockOutput,
+    'rubymine' => RubyMineOutput,
+    'colorized' => ColorizedOutput,
+  }
 
-    def self.add_context(context)
-      (@contexts ||= []) << context
+  def self.add_context(context)
+    (@contexts ||= []) << context
+  end
+
+  def self.current_context_index
+    @current_context_index ||= 0
+  end
+
+  def self.current_context
+    @contexts[current_context_index]
+  end
+
+  def self.run(arg=nil)
+    unless respond_to?(:handle_specification_begin)
+      extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
     end
 
-    def self.current_context_index
-      @current_context_index ||= 0
+    @timer ||= Time.now
+
+    if Platform.android?
+      @main_activity ||= arg
+
+      @contexts.each { |context| execute_context(context) }
+      return handle_summary
     end
 
-    def self.current_context
-      @contexts[current_context_index]
+    Counter[:context_depth] += 1
+    handle_specification_begin(current_context.name)
+    current_context.performSelector("run", withObject:nil, afterDelay:0)
+  end
+
+  def self.execute_context(context)
+    unless respond_to?(:handle_specification_begin)
+      extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
     end
 
-    def self.run(arg=nil)
-      unless respond_to?(:handle_specification_begin)
-        extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
-      end
+    Counter[:context_depth] += 1
+    handle_specification_begin(context.name)
+    context.run
+    handle_specification_end
+    Counter[:context_depth] -= 1
+  end
 
-      @timer ||= Time.now
+  # Android-only.
+  def self.main_activity
+    @main_activity
+  end
 
-      if Platform.android?
-        @main_activity ||= arg
+  def self.context_did_finish(context)
+    return if Platform.android?
 
-        @contexts.each { |context| execute_context(context) }
-        return handle_summary
-      end
+    handle_specification_end
 
-      Counter[:context_depth] += 1
-      handle_specification_begin(current_context.name)
-      current_context.performSelector("run", withObject:nil, afterDelay:0)
+    Counter[:context_depth] -= 1
+
+    if (@current_context_index + 1) < @contexts.size
+      @current_context_index += 1
+      return run
     end
 
-    def self.execute_context(context)
-      unless respond_to?(:handle_specification_begin)
-        extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
-      end
-
-      Counter[:context_depth] += 1
-      handle_specification_begin(context.name)
-      context.run
-      handle_specification_end
-      Counter[:context_depth] -= 1
-    end
-
-    # Android-only.
-    def self.main_activity
-      @main_activity
-    end
-
-    def self.context_did_finish(context)
-      return if Platform.android?
-
-      handle_specification_end
-
-      Counter[:context_depth] -= 1
-
-      if (@current_context_index + 1) < @contexts.size
-        @current_context_index += 1
-        return run
-      end
-
-      handle_summary
-      exit(Counter.values_at(:failed, :errors).inject(:+))
-    end
+    handle_summary
+    exit(Counter.values_at(:failed, :errors).inject(:+))
   end
 end

@@ -9,7 +9,7 @@ describe "NSRunloop aware Bacon" do
   describe "concerning `wait' with a fixed time" do
     it "allows the user to postpone execution of a block for n seconds, which will halt any further execution of specs" do
       started_at_1 = started_at_2 = started_at_3 = Time.now
-      #number_of_specs_before = Motion::Spec::Counter[:specifications]
+      #number_of_specs_before = MotionSpec::Counter[:specifications]
 
       wait 0.5 { (Time.now - started_at_1).should.be.close(0.5, 0.5) }
 
@@ -17,7 +17,7 @@ describe "NSRunloop aware Bacon" do
         (Time.now - started_at_2).should.be.close(1.5, 0.5)
         wait 1.5 do
           (Time.now - started_at_3).should.be.close(3, 0.5)
-          #Motion::Spec::Counter[:specifications].should.eq number_of_specs_before
+          #MotionSpec::Counter[:specifications].should.eq number_of_specs_before
         end
       end
     end

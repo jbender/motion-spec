@@ -27,9 +27,6 @@ Motion::Require.all([
 # Monkeypatch core objects to respond to test methods
 Motion::Require.all(Dir.glob('lib/motion-spec/extensions/*.rb'))
 
-# Clobber RubyMotion's built-in specs
-Motion::Require.all('lib/motion-spec/clobber_bacon.rb')
-
 # Do not log all exceptions when running the specs.
 Exception.log_exceptions = false if Exception.respond_to? :log_exceptions
 
@@ -45,6 +42,37 @@ if defined?(UIDevice) &&
 
     def print(*args)
       puts *args # TODO
+    end
+  end
+end
+
+# Remove the 'spec' file from the core load path so that the copy of "MotionSpec"
+# included in RubyMotion is not automatically loaded.
+module Motion
+  module Project
+    class Config
+      def spec_core_files
+        @spec_core_files ||= begin
+          # Core library + core helpers.
+          Dir.chdir(File.join(File.dirname(__FILE__), '..')) do
+            # NOTE: This line is commented out to avoid loading Bacon. That file
+            # not only adds Bacon but monkeypatches things like Kernel.describe
+            # that we don't want.
+            (#['spec.rb'] +
+            Dir.glob(File.join('spec', 'helpers', '*.rb')) +
+            Dir.glob(File.join('project', 'template', App.template.to_s, 'spec-helpers', '*.rb'))).
+              map { |x| File.expand_path(x) }
+          end
+        end
+      end
+    end
+
+    class IOSConfig
+      alias_method :old_main_cpp_file_txt, :main_cpp_file_txt
+
+      def main_cpp_file_txt(spec_objs)
+        old_main_cpp_file_txt(spec_objs).gsub(/Bacon/, 'MotionSpec')
+      end
     end
   end
 end

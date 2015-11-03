@@ -3,7 +3,7 @@ require File.expand_path('../lib/motion-spec/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name    = 'motion-spec'
-  spec.version = Motion::Spec::VERSION
+  spec.version = MotionSpec::VERSION
   spec.authors = ['Jonathan Bender']
   spec.email   = ['jlbender@gmail.com']
 

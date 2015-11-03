@@ -36,9 +36,9 @@ class Should
     end
 
     r = yield(@object, *args)
-    if Motion::Spec::Counter[:depth] > 0
-      Motion::Spec::Counter[:requirements] += 1
-      raise Motion::Spec::Error.new(:failed, description)  unless @negated ^ r
+    if MotionSpec::Counter[:depth] > 0
+      MotionSpec::Counter[:requirements] += 1
+      raise MotionSpec::Error.new(:failed, description)  unless @negated ^ r
       r
     else
       @negated ? !r : !!r
@@ -70,6 +70,6 @@ class Should
   alias_method :same_as, :identical_to
 
   def flunk(reason="Flunked")
-    raise Motion::Spec::Error.new(:failed, reason)
+    raise MotionSpec::Error.new(:failed, reason)
   end
 end

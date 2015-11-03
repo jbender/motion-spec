@@ -5,14 +5,14 @@ describe "Bacon" do
 
   def succeed
     lambda do |block|
-      block.should.not.raise Motion::Spec::Error
+      block.should.not.raise MotionSpec::Error
       true
     end
   end
 
   def fail
     lambda do |block|
-      block.should.raise Motion::Spec::Error
+      block.should.raise MotionSpec::Error
       true
     end
   end
@@ -350,7 +350,7 @@ end
 
 describe 'describe arguments' do
   def check(ctx, name)
-    ctx.class.ancestors.should.include Motion::Spec::Context
+    ctx.class.ancestors.should.include MotionSpec::Context
     ctx.instance_variable_get('@name').should.eq name
   end
 
@@ -367,11 +367,11 @@ describe 'describe arguments' do
   end
 
   it 'should work with namespaced modules' do
-    check(Kernel.send(:describe, Motion::Spec::Context) {}, 'Motion::Spec::Context')
+    check(Kernel.send(:describe, MotionSpec::Context) {}, 'MotionSpec::Context')
   end
 
   it 'should work with multiple arguments' do
-    check(Kernel.send(:describe, Motion::Spec::Context, :empty) {}, 'Motion::Spec::Context empty')
+    check(Kernel.send(:describe, MotionSpec::Context, :empty) {}, 'MotionSpec::Context empty')
   end
 
   it "prefixes the name of a nested context with that of the parent context" do

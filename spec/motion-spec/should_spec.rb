@@ -13,18 +13,18 @@ describe "#should shortcut for #it('should')" do
   end
 
   should "save characters even on failure" do
-    lambda { should.satisfy { 1 == 2 } }.should.raise Motion::Spec::Error
+    lambda { should.satisfy { 1 == 2 } }.should.raise MotionSpec::Error
   end
 
   should "work nested" do
     should.satisfy { 1 == 1 }
   end
 
-  count = Motion::Spec::Counter[:specifications]
+  count = MotionSpec::Counter[:specifications]
   should "add new specifications" do
     # XXX this should +=1 but it's +=2
     # What?
-    (count+2).should.eq Motion::Spec::Counter[:specifications]
+    (count+2).should.eq MotionSpec::Counter[:specifications]
   end
 
   should "have been called" do
