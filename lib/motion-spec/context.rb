@@ -53,8 +53,16 @@ module MotionSpec
       @after << block
     end
 
-    def behaves_like(*names)
-      names.each { |name| instance_eval(&Shared[name]) }
+    def it_behaves_like(name, &block)
+      describe("behaves like #{name}") do
+        include_examples(name)
+        instance_eval(&block) if block_given?
+      end
+    end
+    alias_method :behaves_like, :it_behaves_like
+
+    def include_examples(name)
+      instance_eval(&Shared[name])
     end
 
     def it(description, &block)
