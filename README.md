@@ -1,8 +1,9 @@
 # MotionSpec
+[![App Version](https://img.shields.io/gem/v/motion-spec.svg)](https://rubygems.org/gems/motion-spec)
 [![Build Status](https://img.shields.io/travis/jbender/motion-spec/master.svg)](https://travis-ci.org/jbender/motion-spec)
 [![Code Climate](https://img.shields.io/codeclimate/github/jbender/motion-spec.svg)](https://codeclimate.com/github/jbender/motion-spec)
-[![MIT Licensed](https://img.shields.io/github/license/jbender/motion-spec.svg)](https://github.com/jbender/motion-spec/blob/master/LICENSE)
 [![Dependency Status](https://img.shields.io/gemnasium/jbender/motion-spec.svg)](https://gemnasium.com/jbender/motion-spec)
+[![MIT Licensed](https://img.shields.io/github/license/jbender/motion-spec.svg)](https://github.com/jbender/motion-spec/blob/master/LICENSE)
 
 Specs are important! This project makes them a first-class citizen again.
 
