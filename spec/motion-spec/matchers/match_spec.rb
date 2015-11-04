@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::Match" do
   it 'match passes when subject is a string and matches the regex' do
     expect("asd asd asd").to match(/asd/)

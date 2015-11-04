@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::MatchArray" do
   it 'match_array passes when subject has the same items as value' do
     expect([1,2,3,4]).to match_array([4,2,1,3])

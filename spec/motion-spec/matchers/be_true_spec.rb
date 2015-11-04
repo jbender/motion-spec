@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::BeTrue" do
   it 'be_true passes when value is true' do
     expect(true).to be_true

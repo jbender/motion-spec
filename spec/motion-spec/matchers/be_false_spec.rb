@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::BeFalse" do
   it 'be_false passes when value is false' do
     expect(false).to be_false

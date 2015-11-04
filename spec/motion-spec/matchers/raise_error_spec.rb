@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::RaiseError" do
   it 'raise_error without argument passes when the block raises any exception' do
     expect{ 1/0 }.to raise_error

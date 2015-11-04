@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::Include" do
   it 'include passes when subject include? responds true' do
     expect([1,2,3,4]).to include(4)

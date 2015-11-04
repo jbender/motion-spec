@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::Change" do
   class TestClass
     attr_reader :counter

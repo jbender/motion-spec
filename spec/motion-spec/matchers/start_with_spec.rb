@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::StartWith" do
   it 'start_with passes when the subject starts with the given string' do
     expect("super").to start_with("sup")

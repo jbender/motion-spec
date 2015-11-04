@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module MotionSpec
   class Expectation
     def initialize(subject, &subject_block)

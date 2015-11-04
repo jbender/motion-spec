@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::EndWith" do
   it 'end_with passes when the subject ends with the given string' do
     expect("super").to end_with("per")

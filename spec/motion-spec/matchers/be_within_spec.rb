@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::BeWithin" do
   it "passes when subject is within range" do
     expect(27.5).to be_within(0.5).of(27.9)

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::BeGeneric" do
   it 'be_empty passes when value is empty' do
     expect([]).to be_empty

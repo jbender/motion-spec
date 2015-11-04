@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::BeNil" do
   it 'be_nil passes when value is nil' do
     expect(nil).to be_nil

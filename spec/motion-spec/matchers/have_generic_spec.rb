@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::HaveGeneric" do
   it "have_key passes if the hash includes the given key" do
     expect({a: 1, b: 2, c: 3}).to have_key(:c)

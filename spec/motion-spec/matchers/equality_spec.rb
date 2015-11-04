@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::Equality" do
   it 'eql passes when value is eql? to subject' do
     expect(1).to eql(1)

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module MotionSpec
   class Context
     def expect_failure(fail_message = "", &block)

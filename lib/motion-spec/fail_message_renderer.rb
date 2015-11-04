@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module MotionSpec
   class FailMessageRenderer
     def self.expectation(negated)

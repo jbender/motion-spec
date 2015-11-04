@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::RespondTo" do
   it 'respond_to passes when subject responds to method name' do
     expect("string").to respond_to(:upcase)

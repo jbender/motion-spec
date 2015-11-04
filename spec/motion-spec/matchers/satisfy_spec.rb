@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::Satisfy" do
   it 'satisfy passes when the block returns true' do
     expect(1).to satisfy{|v| v == 1}

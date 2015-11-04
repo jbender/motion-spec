@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 describe "Matcher::HaveItems" do
   it 'have passes when subject has the same number of items' do
     expect([1,2,3]).to have(3).items
