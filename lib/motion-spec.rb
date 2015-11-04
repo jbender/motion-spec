@@ -7,25 +7,33 @@ require 'motion-require'
 
 # Proper load order of all the classes/modules
 ###
+def require_lib_file(file)
+  case file
+  when String
+    files = expanded_file_path(file)
+    files = Dir.glob(files) if file.include? '*'
+  when Array
+    files = file.map { |f| expanded_file_path(f) }
+  end
+
+  Motion::Require.all(files)
+end
+
+def expanded_file_path(file)
+  File.expand_path("../motion-spec/#{file}.rb", __FILE__)
+end
 
 # Let's start off with what version we're running
-Motion::Require.all('lib/motion-spec/version.rb')
+require_lib_file('version')
 
 # Load the output before the core so the core knows how to print
-Motion::Require.all(Dir.glob('lib/motion-spec/output/*.rb'))
+require_lib_file('output/*')
 
 # All the other core modules in the proper order
-Motion::Require.all([
-  'lib/motion-spec/core.rb',
-  'lib/motion-spec/error.rb',
-  'lib/motion-spec/specification.rb',
-  'lib/motion-spec/platform.rb',
-  'lib/motion-spec/context.rb',
-  'lib/motion-spec/should.rb'
-])
+require_lib_file(%w(core error specification platform context should))
 
 # Monkeypatch core objects to respond to test methods
-Motion::Require.all(Dir.glob('lib/motion-spec/extensions/*.rb'))
+require_lib_file('extensions/*')
 
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&
