@@ -1,8 +1,6 @@
 # -*- encoding : utf-8 -*-
-motion_require '../spec_helper'
 
 describe "#should shortcut for #it('should')" do
-
   should "be called" do
     @called = true
     @called.should.eq true
@@ -30,5 +28,4 @@ describe "#should shortcut for #it('should')" do
   should "have been called" do
     @called.should.eq true
   end
-
 end

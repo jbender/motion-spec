@@ -1,8 +1,6 @@
 # -*- encoding : utf-8 -*-
-motion_require '../spec_helper'
 
-describe "Bacon" do
-
+describe "MotionSpec" do
   def succeed
     lambda do |block|
       block.should.not.raise MotionSpec::Error
@@ -21,19 +19,18 @@ describe "Bacon" do
     lambda { |s| x == s.to_s }
   end
 
-  it "should have should.satisfy" do
+  it "has should.satisfy" do
     lambda { should.satisfy { 1 == 1 } }.should succeed
     lambda { should.satisfy { 1 } }.should succeed
 
     lambda { should.satisfy { 1 != 1 } }.should fail
-    lambda { should.satisfy { false } }.should fail
     lambda { should.satisfy { false } }.should fail
 
     lambda { 1.should.satisfy { |n| n % 2 == 0 } }.should fail
     lambda { 2.should.satisfy { |n| n % 2 == 0 } }.should succeed
   end
 
-  it "should have should.equal" do
+  it "has should.equal" do
     lambda { "string1".should.eq "string1" }.should succeed
     lambda { "string1".should.eq "string2" }.should fail
     lambda { "1".should.eq 1 }.should fail
@@ -43,7 +40,7 @@ describe "Bacon" do
     lambda { "1".should.equal 1 }.should fail
   end
 
-  it "should have should.raise" do
+  it "has should.raise" do
     lambda { lambda { raise "Error" }.should.raise }.should succeed
     lambda { lambda { raise "Error" }.should.raise RuntimeError }.should succeed
     lambda { lambda { raise "Error" }.should.not.raise }.should fail
@@ -53,7 +50,7 @@ describe "Bacon" do
     lambda { lambda { raise "Error" }.should.raise(Interrupt) }.should.raise
   end
 
-  it "should have should.raise with a block" do
+  it "has should.raise with a block" do
     lambda { should.raise { raise "Error" } }.should succeed
     lambda { should.raise(RuntimeError) { raise "Error" } }.should succeed
     lambda { should.not.raise { raise "Error" } }.should fail
@@ -63,13 +60,13 @@ describe "Bacon" do
     lambda { should.raise(Interrupt) { raise "Error" } }.should.raise
   end
 
-  it "should have a should.raise should return the exception" do
+  it "has a should.raise should return the exception" do
     ex = lambda { raise "foo!" }.should.raise
     ex.should.be.kind_of RuntimeError
     ex.message.should =~ /foo/
   end
 
-  it "should have should.be.an.instance_of" do
+  it "has should.be.an.instance_of" do
     lambda { "string".should.be.instance_of String }.should succeed
     lambda { "string".should.be.instance_of Hash }.should fail
 
@@ -77,14 +74,14 @@ describe "Bacon" do
     lambda { "string".should.be.an.instance_of Hash }.should fail
   end
 
-  it "should have should.be.nil" do
+  it "has should.be.nil" do
     lambda { nil.should.be.nil }.should succeed
     lambda { nil.should.not.be.nil }.should fail
     lambda { "foo".should.be.nil }.should fail
     lambda { "foo".should.not.be.nil }.should succeed
   end
 
-  it "should have should.include" do
+  it "has should.include" do
     lambda { [1,2,3].should.include 2 }.should succeed
     lambda { [1,2,3].should.include 4 }.should fail
 
@@ -92,7 +89,7 @@ describe "Bacon" do
     lambda { {1=>2, 3=>4}.should.include 2 }.should fail
   end
 
-  it "should have should.be.a.kind_of" do
+  it "has should.be.a.kind_of" do
     lambda { Array.should.be.kind_of Module }.should succeed
     lambda { "string".should.be.kind_of Object }.should succeed
     lambda { 1.should.be.kind_of Comparable }.should succeed
@@ -102,7 +99,7 @@ describe "Bacon" do
     lambda { "string".should.be.a.kind_of Class }.should fail
   end
 
-  it "should have should.match" do
+  it "has should.match" do
     lambda { "string".should.match(/strin./) }.should succeed
     lambda { "string".should =~ /strin./ }.should succeed
 
@@ -110,7 +107,7 @@ describe "Bacon" do
     lambda { "string".should =~ /slin./ }.should fail
   end
 
-  it "should have should.not.raise" do
+  it "has should.not.raise" do
     lambda { lambda { 1 + 1 }.should.not.raise }.should succeed
     lambda { lambda { 1 + 1 }.should.not.raise(Interrupt) }.should succeed
 
@@ -125,34 +122,34 @@ describe "Bacon" do
     lambda { lambda { raise "Error" }.should.not.raise }.should fail
   end
 
-  it "should have should.throw" do
+  it "has should.throw" do
     lambda { lambda { throw :foo }.should.throw(:foo) }.should succeed
     lambda { lambda {       :foo }.should.throw(:foo) }.should fail
 
     should.throw(:foo) { throw :foo }
   end
 
-  it "should have should.not.satisfy" do
+  it "has should.not.satisfy" do
     lambda { should.not.satisfy { 1 == 2 } }.should succeed
     lambda { should.not.satisfy { 1 == 1 } }.should fail
   end
 
-  it "should have should.not.equal" do
+  it "has should.not.equal" do
     lambda { "string1".should.not.eq "string2" }.should succeed
     lambda { "string1".should.not.eq "string1" }.should fail
   end
 
-  it "should have should.not.match" do
+  it "has should.not.match" do
     lambda { "string".should.not.match(/sling/) }.should succeed
     lambda { "string".should.not.match(/string/) }.should fail
-#    lambda { "string".should.not.match("strin") }.should fail
+    # lambda { "string".should.not.match("strin") }.should fail
 
     lambda { "string".should.not =~ /sling/ }.should succeed
     lambda { "string".should.not =~ /string/ }.should fail
-#    lambda { "string".should.not =~ "strin" }.should fail
+    # lambda { "string".should.not =~ "strin" }.should fail
   end
 
-  it "should have should.be.identical_to/same_as" do
+  it "has should.be.identical_to/same_as" do
     lambda { s = "string"; s.should.be.identical_to s }.should succeed
     lambda { "string".should.be.identical_to "string" }.should fail
 
@@ -160,13 +157,13 @@ describe "Bacon" do
     lambda { "string".should.be.same_as "string" }.should fail
   end
 
-  it "should have should.respond_to" do
+  it "has should.respond_to" do
     lambda { "foo".should.respond_to :to_s }.should succeed
     lambda { 5.should.respond_to :to_str }.should fail
     lambda { :foo.should.respond_to :nx }.should fail
   end
 
-  it "should have should.be.close" do
+  it "has should.be.close" do
     lambda { 1.4.should.be.close 1.4, 0 }.should succeed
     # TODO this one is disabled because it will probably never run on MacRuby.
     #lambda { 0.4.should.be.close 0.5, 0.1 }.should succeed
@@ -176,7 +173,7 @@ describe "Bacon" do
     lambda { 0.4.should.be.close 0.5, -0.1 }.should fail
   end
 
-  it "should support multiple negation" do
+  it "supports multiple negation" do
     lambda { 1.should.equal 1 }.should succeed
     lambda { 1.should.not.equal 1 }.should fail
     lambda { 1.should.not.not.equal 1 }.should succeed
@@ -188,7 +185,7 @@ describe "Bacon" do
     lambda { 1.should.not.not.not.equal 2 }.should succeed
   end
 
-  it "should have should.<predicate>" do
+  it "has should.<predicate>" do
     lambda { [].should.be.empty }.should succeed
     lambda { [1,2,3].should.not.be.empty }.should succeed
 
@@ -202,7 +199,7 @@ describe "Bacon" do
     lambda { nil.should.not.bla }.should.raise(NoMethodError)
   end
 
-  it "should have should <operator> (>, >=, <, <=, ===)" do
+  it "has should <operator> (>, >=, <, <=, ===)" do
     lambda { 2.should.be > 1 }.should succeed
     lambda { 1.should.be > 2 }.should fail
 
@@ -239,7 +236,7 @@ describe "Bacon" do
     lambda { (1+2).should.not.be equal_string("2") }.should succeed
   end
 
-  it "should have should.flunk" do
+  it "has should.flunk" do
     lambda { should.flunk }.should fail
     lambda { should.flunk "yikes" }.should fail
   end
@@ -264,7 +261,7 @@ describe "before/after" do
     @a.should.equal 3
   end
 
-  it "should run in the right order" do
+  it "runs in the right order" do
     @a.should.equal 2
     @b.should.equal 2
   end
@@ -274,12 +271,12 @@ describe "before/after" do
       @c = 5
     end
 
-    it "should run from higher level" do
+    it "runs from higher level" do
       @a.should.equal 2
       @b.should.equal 2
     end
 
-    it "should run at the nested level" do
+    it "runs at the nested level" do
       @c.should.equal 5
     end
 
@@ -287,18 +284,18 @@ describe "before/after" do
       @a = 5
     end
 
-    it "should run in the right order" do
+    it "runs in the right order" do
       @a.should.equal 5
       @a = 2
     end
   end
 
-  it "should not run from lower level" do
+  it "does not run from lower level" do
     @c.should.be.nil
   end
 
   describe "when nested at a sibling level" do
-    it "should not run from sibling level" do
+    it "does not run from sibling level" do
       @c.should.be.nil
     end
   end
@@ -337,40 +334,50 @@ describe "Methods" do
     42
   end
 
-  it "should be accessible in a test" do
+  it "is accessible in a test" do
     the_meaning_of_life.should.eq 42
   end
 
   describe "when in a sibling context" do
-    it "should be accessible in a test" do
+    it "is accessible in a test" do
       the_meaning_of_life.should.eq 42
     end
   end
 end
 
 describe 'describe arguments' do
+  # These specs are testing describe and each time describe gets called a new
+  # context is popped onto the stack. This leads to some seemingly random
+  # empty output at the end of the specs so let's just pop any newly added
+  # contexts off that stack.
+  before { @before_context_count = MotionSpec.instance_variable_get('@contexts').count }
+  after do
+    @contexts = MotionSpec.instance_variable_get('@contexts')
+    (@contexts.count - @before_context_count).times { @contexts.pop }
+  end
+
   def check(ctx, name)
     ctx.class.ancestors.should.include MotionSpec::Context
     ctx.instance_variable_get('@name').should.eq name
   end
 
-  it 'should work with string' do
+  it 'works with string' do
     check(Kernel.send(:describe, 'string') {}, 'string')
   end
 
-  it 'should work with symbols' do
-    check(Kernel.send(:describe, :behaviour) {}, 'behaviour')
+  it 'works with symbols' do
+    check(Kernel.send(:describe, :behavior) {}, 'behavior')
   end
 
-  it 'should work with modules' do
-    check(Kernel.send(:describe, Bacon) {}, 'Bacon')
+  it 'works with modules' do
+    check(Kernel.send(:describe, MotionSpec) {}, 'MotionSpec')
   end
 
-  it 'should work with namespaced modules' do
+  it 'works with namespaced modules' do
     check(Kernel.send(:describe, MotionSpec::Context) {}, 'MotionSpec::Context')
   end
 
-  it 'should work with multiple arguments' do
+  it 'works with multiple arguments' do
     check(Kernel.send(:describe, MotionSpec::Context, :empty) {}, 'MotionSpec::Context empty')
   end
 

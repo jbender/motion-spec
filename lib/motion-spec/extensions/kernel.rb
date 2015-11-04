@@ -3,7 +3,6 @@ module Kernel
   private
 
   def describe(*args, &block)
-    p 'describing via Kernel'
     MotionSpec::Context.new(args.join(' '), &block)
   end
   alias_method :context, :describe

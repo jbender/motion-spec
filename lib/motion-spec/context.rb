@@ -57,7 +57,7 @@ module MotionSpec
     end
 
     def it(description, &block)
-      return  unless description =~ RestrictName
+      return unless description =~ RestrictName
       block ||= proc { should.flunk "not implemented" }
       Counter[:specifications] += 1
       @specifications << Specification.new(self, description, block, @before, @after)
@@ -70,12 +70,7 @@ module MotionSpec
     end
 
     def describe(*args, &block)
-      p 'describing via Context'
-      p args.join(' ')
-      context = MotionSpec::Context.new(args.join(' '), @before, @after, &block)
-
-      p context
-      p Platform.android?
+      context = MotionSpec::Context.new("#{@name} #{args.join(' ')}", @before, @after, &block)
 
       # FIXME: fix RM-879 and RM-806
       build_ios_parent_context(context) unless Platform.android?
@@ -127,7 +122,6 @@ module MotionSpec
     private
 
     def build_ios_parent_context(context)
-      p 'building parent context'
       (parent_context = self).methods(false).each do |e|
         class << context
           self

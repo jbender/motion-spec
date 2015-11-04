@@ -171,36 +171,35 @@ module MotionSpec
     end
 
     def execute_block
-      begin
-        yield
-      rescue Object => e
-        @exception_occurred = true
+      yield
+    rescue Object => e
+      @exception_occurred = true
 
-        if e.is_a?(Exception)
-          ErrorLog << "#{e.class}: #{e.message}\n"
-          lines = $DEBUG ? e.backtrace : e.backtrace.find_all { |line| line !~ /bin\/macbacon|\/mac_bacon\.rb:\d+/ }
-          lines.each_with_index { |line, i|
-            ErrorLog << "\t#{line}#{i==0 ? ": #{@context.name} - #{@description}" : ""}\n"
-          }
-          ErrorLog << "\n"
+      if e.is_a?(Exception)
+        ErrorLog << "#{e.class}: #{e.message}\n"
+        lines = $DEBUG ? e.backtrace : e.backtrace.find_all { |line| line !~ /bin\/macbacon|\/mac_bacon\.rb:\d+/ }
+        lines.each_with_index { |line, i|
+          ErrorLog << "\t#{line}#{i==0 ? ": #{@context.name} - #{@description}" : ""}\n"
+        }
+        ErrorLog << "\n"
+      else
+        if defined?(NSException)
+          # Pure NSException.
+          ErrorLog << "#{e.name}: #{e.reason}\n"
         else
-          if defined?(NSException)
-            # Pure NSException.
-            ErrorLog << "#{e.name}: #{e.reason}\n"
-          else
-            # Pure Java exception.
-            ErrorLog << "#{e.class.toString} : #{e.getMessage}"
-          end
+          # Pure Java exception.
+          ErrorLog << "#{e.class.toString} : #{e.getMessage}"
         end
+      end
 
-        @error = if e.kind_of? Error
-                   Counter[e.count_as] += 1
+      @error =
+        if e.kind_of? Error
+          Counter[e.count_as] += 1
           "#{e.count_as.to_s.upcase} - #{e}"
         else
           Counter[:errors] += 1
           "ERROR: #{e.class} - #{e}"
         end
-      end
     end
   end
 end

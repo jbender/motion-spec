@@ -1,75 +1,87 @@
 # -*- encoding : utf-8 -*-
-class Should
-  # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
-  # kind_of?, nil?, respond_to?, tainted?
-  # instance_methods.each { |name| undef_method name  if name =~ /\?|^\W+$/ }
+module MotionSpec
+  class Should
+    # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
+    # kind_of?, nil?, respond_to?, tainted?
+    #
+    # The reason that these methods are killed is so that the method_missing
+    # will catch them and push them through `satisfy`. The satisfy method
+    # handles handles chaining and negation (eg .should.not.eq).
+    instance_methods.each { |name| undef_method name if name =~ /\?|^\W+$/ }
 
-  def initialize(object)
-    @object = object
-    @negated = false
-  end
-
-  def not(*args, &block)
-    @negated = !@negated
-
-    return self if args.empty?
-
-    be(*args, &block)
-  end
-
-  def be(*args, &block)
-    return self if args.empty?
-
-    block = args.shift unless block_given?
-    satisfy(*args, &block)
-  end
-  alias_method :a,  :be
-  alias_method :an, :be
-
-  def satisfy(*args, &block)
-    p args
-
-    if args.size == 1 && String === args.first
-      description = args.shift
-    else
-      description = ""
+    def initialize(object)
+      @object = object
+      @negated = false
     end
 
-    r = yield(@object, *args)
-    if MotionSpec::Counter[:depth] > 0
-      MotionSpec::Counter[:requirements] += 1
-      raise MotionSpec::Error.new(:failed, description)  unless @negated ^ r
-      r
-    else
-      @negated ? !r : !!r
+    def not(*args, &block)
+      @negated = !@negated
+
+      return self if args.empty?
+
+      be(*args, &block)
     end
-  end
 
-  def method_missing(name, *args, &block)
-    name = "#{name}?"  if name.to_s =~ /\w[^?]\z/
+    def be(*args, &block)
+      return self if args.empty?
 
-    desc = @negated ? "not " : ""
-    desc << @object.inspect << "." << name.to_s
-    desc << "(" << args.map{|x|x.inspect}.join(", ") << ") failed"
+      block = args.shift unless block_given?
+      satisfy(*args, &block)
+    end
+    alias_method :a,  :be
+    alias_method :an, :be
 
-    satisfy(desc) { |x| x.__send__(name, *args, &block) }
-  end
+    def satisfy(*args, &block)
+      if args.size == 1 && String === args.first
+        description = args.shift
+      else
+        description = ""
+      end
 
-  def equal(value)
-    self == value
-  end
-  alias_method :eq, :equal
+      result = yield(@object, *args)
 
-  def match(value)
-    self =~ value
-  end
+      if Counter[:depth] > 0
+        Counter[:requirements] += 1
+        raise flunk(description) unless @negated ^ result
+        result
+      else
+        @negated ? !result : !!result
+      end
+    end
 
-  def identical_to(value)
-    self.equal? value
-  end
-  alias_method :same_as, :identical_to
+    def method_missing(name, *args, &block)
+      name = "#{name}?"  if name.to_s =~ /\w[^?]\z/
 
-  def flunk(reason="Flunked")
-    raise MotionSpec::Error.new(:failed, reason)
+      desc = @negated ? "not " : ""
+      desc << @object.inspect << "." << name.to_s
+      desc << "(" << args.map{|x|x.inspect}.join(", ") << ") failed"
+
+      satisfy(desc) { |x| x.__send__(name, *args, &block) }
+    end
+
+    def equal(value)
+      self == value
+    end
+    alias_method :eq, :equal
+
+    def match(value)
+      self =~ value
+    end
+
+    def identical_to(value)
+      self.equal? value
+    end
+    alias_method :same_as, :identical_to
+
+    # TODO: This was in the MacBacon specs and kept for backwards compatibilty
+    # but I've never seen this used before so possibly kill this.
+    def eq=(value)
+      self === value
+    end
+
+    def flunk(reason="Flunked")
+      'flunk da homosapien?'
+      raise Error.new(:failed, reason)
+    end
   end
 end

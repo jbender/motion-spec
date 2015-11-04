@@ -27,9 +27,6 @@ Motion::Require.all([
 # Monkeypatch core objects to respond to test methods
 Motion::Require.all(Dir.glob('lib/motion-spec/extensions/*.rb'))
 
-# Do not log all exceptions when running the specs.
-Exception.log_exceptions = false if Exception.respond_to? :log_exceptions
-
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&
   UIDevice.respond_to?("currentDevice") &&

@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-motion_require '../spec_helper'
 
 $false_is_not_true = false.should.not.be.true
 $nil_is_not_true = nil.should.not.be.true
