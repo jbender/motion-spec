@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 module MotionSpec
   class Context
+    include ContextHelper::Matchers
+    include ContextHelper::Should
+    include ContextHelper::Expectation
+
     attr_reader :name, :block
 
     def initialize(name, before = nil, after = nil, &block)
