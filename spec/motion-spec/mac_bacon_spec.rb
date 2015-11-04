@@ -136,7 +136,7 @@ describe 'NSRunloop aware Bacon' do
           end
         end
 
-        behaves_like 'waiting in before/after filters'
+        include_examples 'waiting in before/after filters'
       end
 
       describe 'and without explicit time' do
@@ -162,7 +162,7 @@ describe 'NSRunloop aware Bacon' do
           end
         end
 
-        behaves_like 'waiting in before/after filters'
+        include_examples 'waiting in before/after filters'
       end
     end
 
@@ -194,7 +194,7 @@ describe 'NSRunloop aware Bacon' do
         @observable.an_attribute = 'changed'
       end
 
-      behaves_like 'waiting in before/after filters'
+      include_examples 'waiting in before/after filters'
     end
   end
 end

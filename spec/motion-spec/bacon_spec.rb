@@ -313,20 +313,49 @@ shared 'another shared context' do
   end
 end
 
-describe 'shared/behaves_like' do
-  behaves_like 'a shared context'
+shared 'shared behavior with before' do
+  before { @shared_before = 'foo' }
+end
+
+describe 'it_behaves_like' do
+  it_behaves_like 'a shared context'
 
   ctx = self
   it 'raises NameError when the context is not found' do
     proc { ctx.behaves_like 'whoops' }.should.raise NameError
   end
 
-  behaves_like 'a shared context'
+  it_behaves_like 'a shared context'
 
-  before {
-    @magic = 42
-  }
-  behaves_like 'another shared context'
+  before { @magic = 42 }
+  it_behaves_like 'another shared context'
+
+  context 'isolates instance variables' do
+    it_behaves_like 'shared behavior with before' do
+      it 'runs within context of shared block' do
+        @shared_before.should.eq 'foo'
+      end
+    end
+
+    it 'does not leak instance variables' do
+      @shared_before.should.eq nil
+    end
+  end
+end
+
+describe 'include_examples' do
+  include_examples 'a shared context'
+
+  before { @magic = 42 }
+  include_examples 'another shared context'
+
+  context 'sets instance variables in parent scope' do
+    include_examples 'shared behavior with before'
+
+    it 'adds instance variables' do
+      @shared_before.should.eq 'foo'
+    end
+  end
 end
 
 describe 'Methods' do
