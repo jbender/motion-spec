@@ -1,251 +1,248 @@
 # -*- encoding : utf-8 -*-
-motion_require '../spec_helper'
 
-describe "Bacon" do
-
+describe 'MotionSpec' do
   def succeed
-    lambda do |block|
-      block.should.not.raise Motion::Spec::Error
+    proc do |block|
+      block.should.not.raise MotionSpec::Error
       true
     end
   end
 
   def fail
-    lambda do |block|
-      block.should.raise Motion::Spec::Error
+    proc do |block|
+      block.should.raise MotionSpec::Error
       true
     end
   end
 
   def equal_string(x)
-    lambda { |s| x == s.to_s }
+    proc { |s| x == s.to_s }
   end
 
-  it "should have should.satisfy" do
-    lambda { should.satisfy { 1 == 1 } }.should succeed
-    lambda { should.satisfy { 1 } }.should succeed
+  it 'has should.satisfy' do
+    proc { should.satisfy { 1 == 1 } }.should succeed
+    proc { should.satisfy { 1 } }.should succeed
 
-    lambda { should.satisfy { 1 != 1 } }.should fail
-    lambda { should.satisfy { false } }.should fail
-    lambda { should.satisfy { false } }.should fail
+    proc { should.satisfy { 1 != 1 } }.should fail
+    proc { should.satisfy { false } }.should fail
 
-    lambda { 1.should.satisfy { |n| n % 2 == 0 } }.should fail
-    lambda { 2.should.satisfy { |n| n % 2 == 0 } }.should succeed
+    proc { 1.should.satisfy { |n| n % 2 == 0 } }.should fail
+    proc { 2.should.satisfy { |n| n % 2 == 0 } }.should succeed
   end
 
-  it "should have should.equal" do
-    lambda { "string1".should.eq "string1" }.should succeed
-    lambda { "string1".should.eq "string2" }.should fail
-    lambda { "1".should.eq 1 }.should fail
+  it 'has should.equal' do
+    proc { 'string1'.should.eq 'string1' }.should succeed
+    proc { 'string1'.should.eq 'string2' }.should fail
+    proc { '1'.should.eq 1 }.should fail
 
-    lambda { "string1".should.equal "string1" }.should succeed
-    lambda { "string1".should.equal "string2" }.should fail
-    lambda { "1".should.equal 1 }.should fail
+    proc { 'string1'.should.equal 'string1' }.should succeed
+    proc { 'string1'.should.equal 'string2' }.should fail
+    proc { '1'.should.equal 1 }.should fail
   end
 
-  it "should have should.raise" do
-    lambda { lambda { raise "Error" }.should.raise }.should succeed
-    lambda { lambda { raise "Error" }.should.raise RuntimeError }.should succeed
-    lambda { lambda { raise "Error" }.should.not.raise }.should fail
-    lambda { lambda { raise "Error" }.should.not.raise(RuntimeError) }.should fail
+  it 'has should.raise' do
+    proc { proc { raise 'Error' }.should.raise }.should succeed
+    proc { proc { raise 'Error' }.should.raise RuntimeError }.should succeed
+    proc { proc { raise 'Error' }.should.not.raise }.should fail
+    proc { proc { raise 'Error' }.should.not.raise(RuntimeError) }.should fail
 
-    lambda { lambda { 1 + 1 }.should.raise }.should fail
-    lambda { lambda { raise "Error" }.should.raise(Interrupt) }.should.raise
+    proc { proc { 1 + 1 }.should.raise }.should fail
+    proc { proc { raise 'Error' }.should.raise(Interrupt) }.should.raise
   end
 
-  it "should have should.raise with a block" do
-    lambda { should.raise { raise "Error" } }.should succeed
-    lambda { should.raise(RuntimeError) { raise "Error" } }.should succeed
-    lambda { should.not.raise { raise "Error" } }.should fail
-    lambda { should.not.raise(RuntimeError) { raise "Error" } }.should fail
+  it 'has should.raise with a block' do
+    proc { should.raise { raise 'Error' } }.should succeed
+    proc { should.raise(RuntimeError) { raise 'Error' } }.should succeed
+    proc { should.not.raise { raise 'Error' } }.should fail
+    proc { should.not.raise(RuntimeError) { raise 'Error' } }.should fail
 
-    lambda { should.raise { 1 + 1 } }.should fail
-    lambda { should.raise(Interrupt) { raise "Error" } }.should.raise
+    proc { should.raise { 1 + 1 } }.should fail
+    proc { should.raise(Interrupt) { raise 'Error' } }.should.raise
   end
 
-  it "should have a should.raise should return the exception" do
-    ex = lambda { raise "foo!" }.should.raise
+  it 'has a should.raise should return the exception' do
+    ex = proc { raise 'foo!' }.should.raise
     ex.should.be.kind_of RuntimeError
     ex.message.should =~ /foo/
   end
 
-  it "should have should.be.an.instance_of" do
-    lambda { "string".should.be.instance_of String }.should succeed
-    lambda { "string".should.be.instance_of Hash }.should fail
+  it 'has should.be.an.instance_of' do
+    proc { 'string'.should.be.instance_of String }.should succeed
+    proc { 'string'.should.be.instance_of Hash }.should fail
 
-    lambda { "string".should.be.an.instance_of String }.should succeed
-    lambda { "string".should.be.an.instance_of Hash }.should fail
+    proc { 'string'.should.be.an.instance_of String }.should succeed
+    proc { 'string'.should.be.an.instance_of Hash }.should fail
   end
 
-  it "should have should.be.nil" do
-    lambda { nil.should.be.nil }.should succeed
-    lambda { nil.should.not.be.nil }.should fail
-    lambda { "foo".should.be.nil }.should fail
-    lambda { "foo".should.not.be.nil }.should succeed
+  it 'has should.be.nil' do
+    proc { nil.should.be.nil }.should succeed
+    proc { nil.should.not.be.nil }.should fail
+    proc { 'foo'.should.be.nil }.should fail
+    proc { 'foo'.should.not.be.nil }.should succeed
   end
 
-  it "should have should.include" do
-    lambda { [1,2,3].should.include 2 }.should succeed
-    lambda { [1,2,3].should.include 4 }.should fail
+  it 'has should.include' do
+    proc { [1, 2, 3].should.include 2 }.should succeed
+    proc { [1, 2, 3].should.include 4 }.should fail
 
-    lambda { {1=>2, 3=>4}.should.include 1 }.should succeed
-    lambda { {1=>2, 3=>4}.should.include 2 }.should fail
+    proc { { 1 => 2, 3 => 4 }.should.include 1 }.should succeed
+    proc { { 1 => 2, 3 => 4 }.should.include 2 }.should fail
   end
 
-  it "should have should.be.a.kind_of" do
-    lambda { Array.should.be.kind_of Module }.should succeed
-    lambda { "string".should.be.kind_of Object }.should succeed
-    lambda { 1.should.be.kind_of Comparable }.should succeed
+  it 'has should.be.a.kind_of' do
+    proc { Array.should.be.kind_of Module }.should succeed
+    proc { 'string'.should.be.kind_of Object }.should succeed
+    proc { 1.should.be.kind_of Comparable }.should succeed
 
-    lambda { Array.should.be.a.kind_of Module }.should succeed
+    proc { Array.should.be.a.kind_of Module }.should succeed
 
-    lambda { "string".should.be.a.kind_of Class }.should fail
+    proc { 'string'.should.be.a.kind_of Class }.should fail
   end
 
-  it "should have should.match" do
-    lambda { "string".should.match(/strin./) }.should succeed
-    lambda { "string".should =~ /strin./ }.should succeed
+  it 'has should.match' do
+    proc { 'string'.should.match(/strin./) }.should succeed
+    proc { 'string'.should =~ /strin./ }.should succeed
 
-    lambda { "string".should.match(/slin./) }.should fail
-    lambda { "string".should =~ /slin./ }.should fail
+    proc { 'string'.should.match(/slin./) }.should fail
+    proc { 'string'.should =~ /slin./ }.should fail
   end
 
-  it "should have should.not.raise" do
-    lambda { lambda { 1 + 1 }.should.not.raise }.should succeed
-    lambda { lambda { 1 + 1 }.should.not.raise(Interrupt) }.should succeed
+  it 'has should.not.raise' do
+    proc { proc { 1 + 1 }.should.not.raise }.should succeed
+    proc { proc { 1 + 1 }.should.not.raise(Interrupt) }.should succeed
 
-    lambda {
-      lambda {
-        lambda {
-          Kernel.raise ZeroDivisionError.new("ArgumentError")
+    proc {
+      proc {
+        proc {
+          Kernel.raise ZeroDivisionError.new('ArgumentError')
         }.should.not.raise(RuntimeError, Comparable)
       }.should.raise ZeroDivisionError
     }.should succeed
 
-    lambda { lambda { raise "Error" }.should.not.raise }.should fail
+    proc { proc { raise 'Error' }.should.not.raise }.should fail
   end
 
-  it "should have should.throw" do
-    lambda { lambda { throw :foo }.should.throw(:foo) }.should succeed
-    lambda { lambda {       :foo }.should.throw(:foo) }.should fail
+  it 'has should.throw' do
+    proc { proc { throw :foo }.should.throw(:foo) }.should succeed
+    proc { proc {       :foo }.should.throw(:foo) }.should fail
 
     should.throw(:foo) { throw :foo }
   end
 
-  it "should have should.not.satisfy" do
-    lambda { should.not.satisfy { 1 == 2 } }.should succeed
-    lambda { should.not.satisfy { 1 == 1 } }.should fail
+  it 'has should.not.satisfy' do
+    proc { should.not.satisfy { 1 == 2 } }.should succeed
+    proc { should.not.satisfy { 1 == 1 } }.should fail
   end
 
-  it "should have should.not.equal" do
-    lambda { "string1".should.not.eq "string2" }.should succeed
-    lambda { "string1".should.not.eq "string1" }.should fail
+  it 'has should.not.equal' do
+    proc { 'string1'.should.not.eq 'string2' }.should succeed
+    proc { 'string1'.should.not.eq 'string1' }.should fail
   end
 
-  it "should have should.not.match" do
-    lambda { "string".should.not.match(/sling/) }.should succeed
-    lambda { "string".should.not.match(/string/) }.should fail
-#    lambda { "string".should.not.match("strin") }.should fail
+  it 'has should.not.match' do
+    proc { 'string'.should.not.match(/sling/) }.should succeed
+    proc { 'string'.should.not.match(/string/) }.should fail
+    # proc { "string".should.not.match("strin") }.should fail
 
-    lambda { "string".should.not =~ /sling/ }.should succeed
-    lambda { "string".should.not =~ /string/ }.should fail
-#    lambda { "string".should.not =~ "strin" }.should fail
+    proc { 'string'.should.not =~ /sling/ }.should succeed
+    proc { 'string'.should.not =~ /string/ }.should fail
+    # proc { "string".should.not =~ "strin" }.should fail
   end
 
-  it "should have should.be.identical_to/same_as" do
-    lambda { s = "string"; s.should.be.identical_to s }.should succeed
-    lambda { "string".should.be.identical_to "string" }.should fail
+  it 'has should.be.identical_to/same_as' do
+    proc { s = 'string'; s.should.be.identical_to s }.should succeed
+    proc { 'string'.should.be.identical_to 'string' }.should fail
 
-    lambda { s = "string"; s.should.be.same_as s }.should succeed
-    lambda { "string".should.be.same_as "string" }.should fail
+    proc { s = 'string'; s.should.be.same_as s }.should succeed
+    proc { 'string'.should.be.same_as 'string' }.should fail
   end
 
-  it "should have should.respond_to" do
-    lambda { "foo".should.respond_to :to_s }.should succeed
-    lambda { 5.should.respond_to :to_str }.should fail
-    lambda { :foo.should.respond_to :nx }.should fail
+  it 'has should.respond_to' do
+    proc { 'foo'.should.respond_to :to_s }.should succeed
+    proc { 5.should.respond_to :to_str }.should fail
+    proc { :foo.should.respond_to :nx }.should fail
   end
 
-  it "should have should.be.close" do
-    lambda { 1.4.should.be.close 1.4, 0 }.should succeed
+  it 'has should.be.close' do
+    proc { 1.4.should.be.close 1.4, 0 }.should succeed
     # TODO this one is disabled because it will probably never run on MacRuby.
-    #lambda { 0.4.should.be.close 0.5, 0.1 }.should succeed
+    # proc { 0.4.should.be.close 0.5, 0.1 }.should succeed
 
-    lambda { 0.4.should.be.close 0.5, 0.05 }.should fail
-    lambda { 0.4.should.be.close Object.new, 0.1 }.should fail
-    lambda { 0.4.should.be.close 0.5, -0.1 }.should fail
+    proc { 0.4.should.be.close 0.5, 0.05 }.should fail
+    proc { 0.4.should.be.close Object.new, 0.1 }.should fail
+    proc { 0.4.should.be.close 0.5, -0.1 }.should fail
   end
 
-  it "should support multiple negation" do
-    lambda { 1.should.equal 1 }.should succeed
-    lambda { 1.should.not.equal 1 }.should fail
-    lambda { 1.should.not.not.equal 1 }.should succeed
-    lambda { 1.should.not.not.not.equal 1 }.should fail
+  it 'supports multiple negation' do
+    proc { 1.should.equal 1 }.should succeed
+    proc { 1.should.not.equal 1 }.should fail
+    proc { 1.should.not.not.equal 1 }.should succeed
+    proc { 1.should.not.not.not.equal 1 }.should fail
 
-    lambda { 1.should.equal 2 }.should fail
-    lambda { 1.should.not.equal 2 }.should succeed
-    lambda { 1.should.not.not.equal 2 }.should fail
-    lambda { 1.should.not.not.not.equal 2 }.should succeed
+    proc { 1.should.equal 2 }.should fail
+    proc { 1.should.not.equal 2 }.should succeed
+    proc { 1.should.not.not.equal 2 }.should fail
+    proc { 1.should.not.not.not.equal 2 }.should succeed
   end
 
-  it "should have should.<predicate>" do
-    lambda { [].should.be.empty }.should succeed
-    lambda { [1,2,3].should.not.be.empty }.should succeed
+  it 'has should.<predicate>' do
+    proc { [].should.be.empty }.should succeed
+    proc { [1, 2, 3].should.not.be.empty }.should succeed
 
-    lambda { [].should.not.be.empty }.should fail
-    lambda { [1,2,3].should.be.empty }.should fail
+    proc { [].should.not.be.empty }.should fail
+    proc { [1, 2, 3].should.be.empty }.should fail
 
-    lambda { {1=>2, 3=>4}.should.has_key 1 }.should succeed
-    lambda { {1=>2, 3=>4}.should.not.has_key 2 }.should succeed
+    proc { { 1 => 2, 3 => 4 }.should.has_key 1 }.should succeed
+    proc { { 1 => 2, 3 => 4 }.should.not.has_key 2 }.should succeed
 
-    lambda { nil.should.bla }.should.raise(NoMethodError)
-    lambda { nil.should.not.bla }.should.raise(NoMethodError)
+    proc { nil.should.bla }.should.raise(NoMethodError)
+    proc { nil.should.not.bla }.should.raise(NoMethodError)
   end
 
-  it "should have should <operator> (>, >=, <, <=, ===)" do
-    lambda { 2.should.be > 1 }.should succeed
-    lambda { 1.should.be > 2 }.should fail
+  it 'has should <operator> (>, >=, <, <=, ===)' do
+    proc { 2.should.be > 1 }.should succeed
+    proc { 1.should.be > 2 }.should fail
 
-    lambda { 1.should.be < 2 }.should succeed
-    lambda { 2.should.be < 1 }.should fail
+    proc { 1.should.be < 2 }.should succeed
+    proc { 2.should.be < 1 }.should fail
 
-    lambda { 2.should.be >= 1 }.should succeed
-    lambda { 2.should.be >= 2 }.should succeed
-    lambda { 2.should.be >= 2.1 }.should fail
+    proc { 2.should.be >= 1 }.should succeed
+    proc { 2.should.be >= 2 }.should succeed
+    proc { 2.should.be >= 2.1 }.should fail
 
-    lambda { 2.should.be <= 1 }.should fail
-    lambda { 2.should.be <= 2 }.should succeed
-    lambda { 2.should.be <= 2.1 }.should succeed
+    proc { 2.should.be <= 1 }.should fail
+    proc { 2.should.be <= 2 }.should succeed
+    proc { 2.should.be <= 2.1 }.should succeed
 
-    lambda { Array.should.eq= [1,2,3] }.should succeed
-    lambda { Integer.should.eq= [1,2,3] }.should fail
+    proc { Array.should.eq = [1, 2, 3] }.should succeed
+    proc { Integer.should.eq = [1, 2, 3] }.should fail
 
-    lambda { /foo/.should.eq= "foobar" }.should succeed
-    lambda { "foobar".should.eq= /foo/ }.should fail
+    proc { /foo/.should.eq = 'foobar' }.should succeed
+    proc { 'foobar'.should.eq = /foo/ }.should fail
   end
 
-  it "should allow for custom shoulds" do
-    lambda { (1+1).should equal_string("2") }.should succeed
-    lambda { (1+2).should equal_string("2") }.should fail
+  it 'should allow for custom shoulds' do
+    proc { (1 + 1).should equal_string('2') }.should succeed
+    proc { (1 + 2).should equal_string('2') }.should fail
 
-    lambda { (1+1).should.be equal_string("2") }.should succeed
-    lambda { (1+2).should.be equal_string("2") }.should fail
+    proc { (1 + 1).should.be equal_string('2') }.should succeed
+    proc { (1 + 2).should.be equal_string('2') }.should fail
 
-    lambda { (1+1).should.not equal_string("2") }.should fail
-    lambda { (1+2).should.not equal_string("2") }.should succeed
-    lambda { (1+2).should.not.not equal_string("2") }.should fail
+    proc { (1 + 1).should.not equal_string('2') }.should fail
+    proc { (1 + 2).should.not equal_string('2') }.should succeed
+    proc { (1 + 2).should.not.not equal_string('2') }.should fail
 
-    lambda { (1+1).should.not.be equal_string("2") }.should fail
-    lambda { (1+2).should.not.be equal_string("2") }.should succeed
+    proc { (1 + 1).should.not.be equal_string('2') }.should fail
+    proc { (1 + 2).should.not.be equal_string('2') }.should succeed
   end
 
-  it "should have should.flunk" do
-    lambda { should.flunk }.should fail
-    lambda { should.flunk "yikes" }.should fail
+  it 'has should.flunk' do
+    proc { should.flunk }.should fail
+    proc { should.flunk 'yikes' }.should fail
   end
 end
 
-describe "before/after" do
+describe 'before/after' do
   before do
     @a = 1
     @b = 2
@@ -264,22 +261,22 @@ describe "before/after" do
     @a.should.equal 3
   end
 
-  it "should run in the right order" do
+  it 'runs in the right order' do
     @a.should.equal 2
     @b.should.equal 2
   end
 
-  describe "when nested" do
+  describe 'when nested' do
     before do
       @c = 5
     end
 
-    it "should run from higher level" do
+    it 'runs from higher level' do
       @a.should.equal 2
       @b.should.equal 2
     end
 
-    it "should run at the nested level" do
+    it 'runs at the nested level' do
       @c.should.equal 5
     end
 
@@ -287,94 +284,104 @@ describe "before/after" do
       @a = 5
     end
 
-    it "should run in the right order" do
+    it 'runs in the right order' do
       @a.should.equal 5
       @a = 2
     end
   end
 
-  it "should not run from lower level" do
+  it 'does not run from lower level' do
     @c.should.be.nil
   end
 
-  describe "when nested at a sibling level" do
-    it "should not run from sibling level" do
+  describe 'when nested at a sibling level' do
+    it 'does not run from sibling level' do
       @c.should.be.nil
     end
   end
 end
 
-shared "a shared context" do
-  it "gets called where it is included" do
+shared 'a shared context' do
+  it 'gets called where it is included' do
     true.should.be.true
   end
 end
 
-shared "another shared context" do
-  it "can access data" do
+shared 'another shared context' do
+  it 'can access data' do
     @magic.should.be.equal 42
   end
 end
 
-describe "shared/behaves_like" do
-  behaves_like "a shared context"
+describe 'shared/behaves_like' do
+  behaves_like 'a shared context'
 
   ctx = self
-  it "raises NameError when the context is not found" do
-    lambda { ctx.behaves_like "whoops" }.should.raise NameError
+  it 'raises NameError when the context is not found' do
+    proc { ctx.behaves_like 'whoops' }.should.raise NameError
   end
 
-  behaves_like "a shared context"
+  behaves_like 'a shared context'
 
   before {
     @magic = 42
   }
-  behaves_like "another shared context"
+  behaves_like 'another shared context'
 end
 
-describe "Methods" do
+describe 'Methods' do
   def the_meaning_of_life
     42
   end
 
-  it "should be accessible in a test" do
+  it 'is accessible in a test' do
     the_meaning_of_life.should.eq 42
   end
 
-  describe "when in a sibling context" do
-    it "should be accessible in a test" do
+  describe 'when in a sibling context' do
+    it 'is accessible in a test' do
       the_meaning_of_life.should.eq 42
     end
   end
 end
 
 describe 'describe arguments' do
+  # These specs are testing describe and each time describe gets called a new
+  # context is popped onto the stack. This leads to some seemingly random
+  # empty output at the end of the specs so let's just pop any newly added
+  # contexts off that stack.
+  before { @before_context_count = MotionSpec.instance_variable_get('@contexts').count }
+  after do
+    @contexts = MotionSpec.instance_variable_get('@contexts')
+    (@contexts.count - @before_context_count).times { @contexts.pop }
+  end
+
   def check(ctx, name)
-    ctx.class.ancestors.should.include Motion::Spec::Context
+    ctx.class.ancestors.should.include MotionSpec::Context
     ctx.instance_variable_get('@name').should.eq name
   end
 
-  it 'should work with string' do
+  it 'works with string' do
     check(Kernel.send(:describe, 'string') {}, 'string')
   end
 
-  it 'should work with symbols' do
-    check(Kernel.send(:describe, :behaviour) {}, 'behaviour')
+  it 'works with symbols' do
+    check(Kernel.send(:describe, :behavior) {}, 'behavior')
   end
 
-  it 'should work with modules' do
-    check(Kernel.send(:describe, Bacon) {}, 'Bacon')
+  it 'works with modules' do
+    check(Kernel.send(:describe, MotionSpec) {}, 'MotionSpec')
   end
 
-  it 'should work with namespaced modules' do
-    check(Kernel.send(:describe, Motion::Spec::Context) {}, 'Motion::Spec::Context')
+  it 'works with namespaced modules' do
+    check(Kernel.send(:describe, MotionSpec::Context) {}, 'MotionSpec::Context')
   end
 
-  it 'should work with multiple arguments' do
-    check(Kernel.send(:describe, Motion::Spec::Context, :empty) {}, 'Motion::Spec::Context empty')
+  it 'works with multiple arguments' do
+    check(Kernel.send(:describe, MotionSpec::Context, :empty) {}, 'MotionSpec::Context empty')
   end
 
-  it "prefixes the name of a nested context with that of the parent context" do
+  it 'prefixes the name of a nested context with that of the parent context' do
     check(describe('are nested') {}, 'describe arguments are nested')
   end
 end

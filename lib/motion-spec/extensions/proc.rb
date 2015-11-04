@@ -13,12 +13,12 @@ class Proc
       call
       return false
     }
-    return true
+    true
   end
 
   def change?
     pre_result = yield
-    called = call
+    call
     post_result = yield
     pre_result != post_result
   end
