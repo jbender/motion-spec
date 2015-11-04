@@ -14,17 +14,17 @@ module MotionSpec
     end
 
     def handle_requirement_end(error)
-      puts error.empty? ? "" : " [#{error}]"
+      puts error.empty? ? '' : " [#{error}]"
     end
 
     def handle_summary
-      print ErrorLog  if Backtraces
-      puts "%d specifications (%d requirements), %d failures, %d errors" %
+      print ErrorLog if Backtraces
+      puts '%d specifications (%d requirements), %d failures, %d errors' %
         Counter.values_at(:specifications, :requirements, :failed, :errors)
     end
 
     def spaces
-      "  " * (Counter[:context_depth] - 1)
+      '  ' * (Counter[:context_depth] - 1)
     end
   end
 end

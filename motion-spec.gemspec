@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.authors = ['Jonathan Bender']
   spec.email   = ['jlbender@gmail.com']
 
-  spec.summary     = %q{RubyMotion derivative of Bacon, which is a derivative of RSpec}
-  spec.description = %q{RubyMotion derivative of Bacon, which is a derivative of RSpec}
+  spec.summary     = 'RubyMotion derivative of Bacon, which is a derivative of RSpec'
+  spec.description = 'RubyMotion derivative of Bacon, which is a derivative of RSpec'
   spec.homepage    = 'https://github.com/jbender/motion-spec'
   spec.license     = 'MIT'
 

@@ -5,7 +5,8 @@ module MotionSpec
 
     def initialize(name, before = nil, after = nil, &block)
       @name = name
-      @before, @after = (before ? before.dup : []), (after ? after.dup : [])
+      @before = before ? before.dup : []
+      @after = after ? after.dup : []
       @block = block
       @specifications = []
       @current_specification_index = 0
@@ -17,13 +18,13 @@ module MotionSpec
 
     def run
       # TODO
-      #return  unless name =~ RestrictContext
+      # return unless name =~ RestrictContext
 
       if Platform.android?
-        @specifications.each { |spec| spec.run }
+        @specifications.each(&:run)
       else
         spec = current_specification
-        return spec.performSelector("run", withObject:nil, afterDelay:0) if spec
+        return spec.performSelector('run', withObject: nil, afterDelay: 0) if spec
       end
 
       MotionSpec.context_did_finish(self)
@@ -58,7 +59,7 @@ module MotionSpec
 
     def it(description, &block)
       return unless description =~ RestrictName
-      block ||= proc { should.flunk "not implemented" }
+      block ||= proc { should.flunk 'not implemented' }
       Counter[:specifications] += 1
       @specifications << Specification.new(self, description, block, @before, @after)
     end

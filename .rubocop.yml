@@ -1,7 +1,6 @@
 # Disable all checks not explicitly referenced in this file
 # This is used to easily disable Style/* checks
 AllCops:
-  DisabledByDefault: true
   Lint: true
   Metrics: true
   Performance: true
@@ -44,7 +43,16 @@ Metrics/ParameterLists:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#too-many-params'
   Enabled: false
 
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
 Style/IndentationWidth:
   Description: 'Use 2 spaces for indentation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
   Enabled: true
+
+Style/MethodName:
+  Enabled: false
+
+Style/VariableName:
+  Enabled: false

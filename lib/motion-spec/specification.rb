@@ -7,14 +7,17 @@ module MotionSpec
     attr_reader :description
 
     def initialize(context, description, block, before_filters, after_filters)
-      @context, @description, @block = context, description, block
-      @before_filters, @after_filters = before_filters.dup, after_filters.dup
+      @context = context
+      @description = description
+      @block = block
+      @before_filters = before_filters.dup
+      @after_filters = after_filters.dup
 
       @postponed_blocks_count = 0
       @ran_spec_block = false
       @ran_after_filters = false
       @exception_occurred = false
-      @error = ""
+      @error = ''
     end
 
     def postponed?
@@ -49,14 +52,14 @@ module MotionSpec
 
     def schedule_block(seconds, &block)
       # If an exception occurred, we definitely don't need to schedule any more blocks
-      unless @exception_occurred
-        @postponed_blocks_count += 1
-        unless Platform.android?
-          performSelector("run_postponed_block:", withObject:block, afterDelay:seconds)
-        else
-          sleep seconds
-          run_postponed_block(block)
-        end
+      return if @exception_occurred
+
+      @postponed_blocks_count += 1
+      if Platform.android?
+        sleep seconds
+        run_postponed_block(block)
+      else
+        performSelector('run_postponed_block:', withObject: block, afterDelay: seconds)
       end
     end
 
@@ -69,9 +72,9 @@ module MotionSpec
       @postponed_block = block
 
       return performSelector(
-        "postponed_block_timeout_exceeded",
-        withObject:nil,
-        afterDelay:timeout
+        'postponed_block_timeout_exceeded',
+        withObject: nil,
+        afterDelay: timeout
       ) unless Platform.android?
 
       sleep timeout
@@ -86,12 +89,12 @@ module MotionSpec
       @postponed_blocks_count += 1
       @postponed_block = block
       @observed_object_and_key_path = [object_to_observe, key_path]
-      object_to_observe.addObserver(self, forKeyPath:key_path, options:0, context:nil)
+      object_to_observe.addObserver(self, forKeyPath: key_path, options: 0, context: nil)
 
       return performSelector(
-        "postponed_change_block_timeout_exceeded",
-        withObject:nil,
-        afterDelay:timeout
+        'postponed_change_block_timeout_exceeded',
+        withObject: nil,
+        afterDelay: timeout
       ) unless Platform.android?
 
       sleep timeout
@@ -110,7 +113,7 @@ module MotionSpec
     def remove_observer!
       if @observed_object_and_key_path
         object, key_path = @observed_object_and_key_path
-        object.removeObserver(self, forKeyPath:key_path)
+        object.removeObserver(self, forKeyPath: key_path)
         @observed_object_and_key_path = nil
       end
     end
@@ -124,8 +127,8 @@ module MotionSpec
 
     def resume
       unless Platform.android?
-        NSObject.cancelPreviousPerformRequestsWithTarget(self, selector:'postponed_block_timeout_exceeded', object:nil)
-        NSObject.cancelPreviousPerformRequestsWithTarget(self, selector:'postponed_change_block_timeout_exceeded', object:nil)
+        NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: 'postponed_block_timeout_exceeded', object: nil)
+        NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: 'postponed_change_block_timeout_exceeded', object: nil)
       end
       remove_observer!
       block, @postponed_block = @postponed_block, nil
@@ -179,7 +182,7 @@ module MotionSpec
         ErrorLog << "#{e.class}: #{e.message}\n"
         lines = $DEBUG ? e.backtrace : e.backtrace.find_all { |line| line !~ /bin\/macbacon|\/mac_bacon\.rb:\d+/ }
         lines.each_with_index { |line, i|
-          ErrorLog << "\t#{line}#{i==0 ? ": #{@context.name} - #{@description}" : ""}\n"
+          ErrorLog << "\t#{line}#{i == 0 ? ": #{@context.name} - #{@description}" : ''}\n"
         }
         ErrorLog << "\n"
       else
@@ -193,7 +196,7 @@ module MotionSpec
       end
 
       @error =
-        if e.kind_of? Error
+        if e.is_a? Error
           Counter[e.count_as] += 1
           "#{e.count_as.to_s.upcase} - #{e}"
         else

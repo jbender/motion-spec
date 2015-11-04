@@ -4,19 +4,19 @@ class MockObservable
   attr_accessor :an_attribute
 end
 
-describe "NSRunloop aware Bacon" do
+describe 'NSRunloop aware Bacon' do
   describe "concerning `wait' with a fixed time" do
-    it "allows the user to postpone execution of a block for n seconds, which will halt any further execution of specs" do
+    it 'allows the user to postpone execution of a block for n seconds, which will halt any further execution of specs' do
       started_at_1 = started_at_2 = started_at_3 = Time.now
-      #number_of_specs_before = MotionSpec::Counter[:specifications]
+      # number_of_specs_before = MotionSpec::Counter[:specifications]
 
-      wait 0.5 { (Time.now - started_at_1).should.be.close(0.5, 0.5) }
+      wait(0.5) { (Time.now - started_at_1).should.be.close(0.5, 0.5) }
 
       wait 1 do
         (Time.now - started_at_2).should.be.close(1.5, 0.5)
         wait 1.5 do
           (Time.now - started_at_3).should.be.close(3, 0.5)
-          #MotionSpec::Counter[:specifications].should.eq number_of_specs_before
+          # MotionSpec::Counter[:specifications].should.eq number_of_specs_before
         end
       end
     end
@@ -29,11 +29,11 @@ describe "NSRunloop aware Bacon" do
     end
 
     def delegateCallbackTookTooLongMethod
-      raise "Oh noes, I must never be called!"
+      fail 'Oh noes, I must never be called!'
     end
 
-    it "allows the user to postpone execution of a block until Context#resume is called, from for instance a delegate callback" do
-      performSelector('delegateCallbackMethod', withObject:nil, afterDelay:0.1)
+    it 'allows the user to postpone execution of a block until Context#resume is called, from for instance a delegate callback' do
+      performSelector('delegateCallbackMethod', withObject: nil, afterDelay: 0.1)
       @delegateCallbackCalled.should.eq nil
       wait { @delegateCallbackCalled.should.eq true }
     end
@@ -66,9 +66,9 @@ describe "NSRunloop aware Bacon" do
       @observable.an_attribute = 'changed'
     end
 
-    it "resumes the postponed block once an observed value changes" do
+    it 'resumes the postponed block once an observed value changes' do
       value = nil
-      performSelector('triggerChange', withObject:nil, afterDelay:0)
+      performSelector('triggerChange', withObject: nil, afterDelay: 0)
       wait_for_change @observable, 'an_attribute' do
         @observable.an_attribute.should.eq 'changed'
       end
@@ -101,23 +101,23 @@ describe "NSRunloop aware Bacon" do
     # end
   end
 
-  describe "postponing blocks should work from before/after filters as well" do
-    shared "waiting in before/after filters" do
-      it "starts later because of postponed blocks in the before filter" do
+  describe 'postponing blocks should work from before/after filters as well' do
+    shared 'waiting in before/after filters' do
+      it 'starts later because of postponed blocks in the before filter' do
         (Time.now - @started_at).should.be.close(1, 0.5)
       end
 
-      # TODO this will never pass when run in concurrent mode, because it gets
+      # TODO: this will never pass when run in concurrent mode, because it gets
       # executed around the same time as the above spec and take one second as
       # well.
       #
-      #it "starts even later because of the postponed blocks in the after filter" do
-        #(Time.now - @started_at).should.be.close(3, 0.5)
-      #end
+      # it "starts even later because of the postponed blocks in the after filter" do
+      # (Time.now - @started_at).should.be.close(3, 0.5)
+      # end
     end
 
     describe "with `wait'" do
-      describe "and an explicit time" do
+      describe 'and an explicit time' do
         before do
           @started_at ||= Time.now
           wait 0.5 do
@@ -136,24 +136,24 @@ describe "NSRunloop aware Bacon" do
           end
         end
 
-        behaves_like "waiting in before/after filters"
+        behaves_like 'waiting in before/after filters'
       end
 
-      describe "and without explicit time" do
+      describe 'and without explicit time' do
         before do
           @started_at ||= Time.now
-          performSelector('resume', withObject:nil, afterDelay:0.5)
+          performSelector('resume', withObject: nil, afterDelay: 0.5)
           wait do
-            performSelector('resume', withObject:nil, afterDelay:0.5)
+            performSelector('resume', withObject: nil, afterDelay: 0.5)
             wait do
             end
           end
         end
 
         after do
-          performSelector('resume', withObject:nil, afterDelay:0.5)
+          performSelector('resume', withObject: nil, afterDelay: 0.5)
           wait do
-            performSelector('resume', withObject:nil, afterDelay:0.5)
+            performSelector('resume', withObject: nil, afterDelay: 0.5)
             wait do
               @time ||= 0
               @time += 2
@@ -162,7 +162,7 @@ describe "NSRunloop aware Bacon" do
           end
         end
 
-        behaves_like "waiting in before/after filters"
+        behaves_like 'waiting in before/after filters'
       end
     end
 
@@ -170,18 +170,18 @@ describe "NSRunloop aware Bacon" do
       before do
         @observable = MockObservable.new
         @started_at ||= Time.now
-        performSelector('triggerChange', withObject:nil, afterDelay:0.5)
+        performSelector('triggerChange', withObject: nil, afterDelay: 0.5)
         wait_for_change @observable, 'an_attribute' do
-          performSelector('triggerChange', withObject:nil, afterDelay:0.5)
+          performSelector('triggerChange', withObject: nil, afterDelay: 0.5)
           wait_for_change @observable, 'an_attribute' do
           end
         end
       end
 
       after do
-        performSelector('triggerChange', withObject:nil, afterDelay:0.5)
+        performSelector('triggerChange', withObject: nil, afterDelay: 0.5)
         wait_for_change @observable, 'an_attribute' do
-          performSelector('triggerChange', withObject:nil, afterDelay:0.5)
+          performSelector('triggerChange', withObject: nil, afterDelay: 0.5)
           wait_for_change @observable, 'an_attribute' do
             @time ||= 0
             @time += 2
@@ -194,7 +194,7 @@ describe "NSRunloop aware Bacon" do
         @observable.an_attribute = 'changed'
       end
 
-      behaves_like "waiting in before/after filters"
+      behaves_like 'waiting in before/after filters'
     end
   end
 end

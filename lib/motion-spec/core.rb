@@ -6,7 +6,7 @@ module MotionSpec
   DEFAULT_OUTPUT_MODULE = SpecDoxOutput
 
   Counter = Hash.new(0)
-  ErrorLog = ""
+  ErrorLog = ''
   Shared = Hash.new { |_, name|
     raise NameError, "no such context: #{name.inspect}"
   }
@@ -14,7 +14,7 @@ module MotionSpec
   RestrictName    = //  unless defined? RestrictName
   RestrictContext = //  unless defined? RestrictContext
 
-  Backtraces = true  unless defined? Backtraces
+  Backtraces = true unless defined? Backtraces
 
   Outputs = {
     'spec_dox' => SpecDoxOutput,
@@ -23,7 +23,7 @@ module MotionSpec
     'tap' => TapOutput,
     'knock' => KnockOutput,
     'rubymine' => RubyMineOutput,
-    'colorized' => ColorizedOutput,
+    'colorized' => ColorizedOutput
   }
 
   def self.add_context(context)
@@ -38,7 +38,7 @@ module MotionSpec
     @contexts[current_context_index]
   end
 
-  def self.run(arg=nil)
+  def self.run(arg = nil)
     unless respond_to?(:handle_specification_begin)
       extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
     end
@@ -54,7 +54,7 @@ module MotionSpec
 
     Counter[:context_depth] += 1
     handle_specification_begin(current_context.name)
-    current_context.performSelector("run", withObject:nil, afterDelay:0)
+    current_context.performSelector('run', withObject: nil, afterDelay: 0)
   end
 
   def self.execute_context(context)

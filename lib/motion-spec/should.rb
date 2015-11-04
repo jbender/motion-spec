@@ -4,9 +4,9 @@ module MotionSpec
     # Kills ==, ===, =~, eql?, equal?, frozen?, instance_of?, is_a?,
     # kind_of?, nil?, respond_to?, tainted?
     #
-    # The reason that these methods are killed is so that the method_missing
+    # The reason that these methods are killed is so that method_missing
     # will catch them and push them through `satisfy`. The satisfy method
-    # handles handles chaining and negation (eg .should.not.eq).
+    # handles chaining and negation (eg .should.not.eq).
     instance_methods.each { |name| undef_method name if name =~ /\?|^\W+$/ }
 
     def initialize(object)
@@ -35,14 +35,14 @@ module MotionSpec
       if args.size == 1 && String === args.first
         description = args.shift
       else
-        description = ""
+        description = ''
       end
 
       result = yield(@object, *args)
 
       if Counter[:depth] > 0
         Counter[:requirements] += 1
-        raise flunk(description) unless @negated ^ result
+        flunk(description) unless @negated ^ result
         result
       else
         @negated ? !result : !!result
@@ -50,13 +50,15 @@ module MotionSpec
     end
 
     def method_missing(name, *args, &block)
-      name = "#{name}?"  if name.to_s =~ /\w[^?]\z/
+      name = "#{name}?" if name.to_s =~ /\w[^?]\z/
 
-      desc = @negated ? "not " : ""
-      desc << @object.inspect << "." << name.to_s
-      desc << "(" << args.map{|x|x.inspect}.join(", ") << ") failed"
+      desc = @negated ? 'not ' : ''
+      desc << @object.inspect << '.' << name.to_s
+      desc << '(' << args.map(&:inspect).join(', ') << ') failed'
 
-      satisfy(desc) { |x| x.__send__(name, *args, &block) }
+      satisfy(desc) do |object|
+        object.__send__(name, *args, &block)
+      end
     end
 
     def equal(value)
@@ -79,8 +81,7 @@ module MotionSpec
       self === value
     end
 
-    def flunk(reason="Flunked")
-      'flunk da homosapien?'
+    def flunk(reason = 'Flunked')
       raise Error.new(:failed, reason)
     end
   end
