@@ -4,6 +4,7 @@ module MotionSpec
     include ContextHelper::Matchers
     include ContextHelper::Should
     include ContextHelper::Expectation
+    include ContextHelper::MemoizedHelpers
 
     attr_reader :name, :block
 
@@ -139,11 +140,25 @@ module MotionSpec
     private
 
     def build_ios_parent_context(context)
-      (parent_context = self).methods(false).each do |e|
-        class << context
-          self
-        end.send(:define_method, e) do |*args|
-          parent_context.send(e, *args)
+      parent_context = self
+
+      # object.methods(false) returns duplicate method names where one ends in
+      # a ':' (e.g. ['foo:', 'foo']). This was causing a low-level Ruby error:
+      # Assertion failed: (b != NULL), function rb_vm_block_method_imp, file vm.cpp, line 3386.
+      # To fix the issue we removed the 'foo:' version of the method names.
+      methods = parent_context
+        .methods(false)
+        .map { |name| name.to_s.chomp(':') }
+        .uniq
+
+      context_eigenclass = (class << context; self; end)
+      context_eigenclass.send(:define_method, :parent_context) { parent_context }
+
+      methods.each do |method_name|
+        next if context.respond_to?(method_name)
+
+        context_eigenclass.send(:define_method, method_name) do |*args|
+          parent_context.send(method_name, *args)
         end
       end
     end

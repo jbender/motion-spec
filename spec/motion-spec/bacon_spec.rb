@@ -185,4 +185,84 @@ describe 'MotionSpec' do
       check(describe('are nested') {}, 'MotionSpec describe arguments are nested')
     end
   end
+
+  describe '#let' do
+    let(:foo) { 5 }
+    let(:foo_plus_1) { foo + 1 }
+
+    it('works') { foo.should.eq(5) }
+    it('works for lets referencing other lets') { foo_plus_1.should.eq(6) }
+
+    context 'in sub-contexts' do
+      let(:bar) { foo + 2 }
+
+      it('works') { foo.should.eq(5) }
+      it('works') { bar.should.eq(7) }
+    end
+
+    # 'bar' was defined in a different context so should not have leaked into
+    # this context.
+    context 'does not leak variables' do
+      it('works') { proc { bar }.should.raise(NameError) }
+    end
+
+    context 'when redefining existing variable' do
+      let(:foo) { 'hey' }
+
+      it('works') { foo.should.eq('hey') }
+    end
+  end
+
+  describe '#let!' do
+    def incremet_by_one
+      @state ||= 0
+      @state += 1
+    end
+
+    let(:foo) { incremet_by_one }
+    let(:bar) { incremet_by_one }
+
+    context 'without bang' do
+      before do
+        bar
+        foo
+      end
+
+      it 'initializes in order of use' do
+        expect(foo).to eq(bar + 1)
+      end
+    end
+
+    context 'with bang' do
+      let!(:foo) { incremet_by_one }
+
+      before do
+        bar
+        foo
+      end
+
+      it 'initializes bangs first' do
+        bar.should.eq(foo + 1)
+      end
+    end
+  end
+
+  # Note: This works in rspec but does not work here due to differences in how
+  # nested contexts work, namely the fact that in rspec each example/spec is
+  # it's own subclass.
+  # context 'referencing nested variable' do
+  #   let(:foo) { bar + 1 }
+
+  #   context 'bar' do
+  #     let(:bar) { 5 }
+
+  #     it('works') { expect(foo).to eq(6) }
+  #   end
+  # end
+
+  describe '#is_expected' do
+    subject { 5 }
+
+    it('works') { is_expected.to eq(5) }
+  end
 end
