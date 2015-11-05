@@ -81,12 +81,6 @@ module MotionSpec
       )
     end
 
-    def should(*args, &block)
-      return it('should ' + args.first, &block) if Counter[:depth] == 0
-
-      super(*args, &block)
-    end
-
     def describe(*args, &block)
       context = MotionSpec::Context.new("#{@name} #{args.join(' ')}", @before, @after, &block)
 
