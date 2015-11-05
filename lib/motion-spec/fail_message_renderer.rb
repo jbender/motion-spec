@@ -2,7 +2,7 @@
 module MotionSpec
   class FailMessageRenderer
     def self.expectation(negated)
-      "#{negated ? " not" : ""} expected"
+      "#{negated ? ' not' : ''} expected"
     end
 
     def self.message_for_be_false(negated, subject)

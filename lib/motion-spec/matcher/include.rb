@@ -7,7 +7,7 @@ module MotionSpec
       end
 
       def matches?(subject)
-        @values.all?{|v| subject.include?(v)}
+        @values.all? { |v| subject.include?(v) }
       end
 
       def fail!(subject, negated)

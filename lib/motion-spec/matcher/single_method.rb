@@ -12,7 +12,7 @@ module MotionSpec
       end
 
       def fail!(subject, negated)
-        raise FailedExpectation.new(self.fail_message(subject, negated))
+        raise FailedExpectation.new(fail_message(subject, negated))
       end
 
       def fail_message(subject, negated = false)

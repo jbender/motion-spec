@@ -2,7 +2,7 @@
 module MotionSpec
   module Matcher
     class BeWithin
-      INVALID_MATCH_ERROR = "be_within matcher incomplete. Missing .of value"
+      INVALID_MATCH_ERROR = 'be_within matcher incomplete. Missing .of value'
 
       def initialize(range)
         @range = range

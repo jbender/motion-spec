@@ -14,7 +14,7 @@ module MotionSpec
         MotionSpec::Matcher::BeFalse.new
       end
 
-      def raise_error(exception_class = Exception, message = "")
+      def raise_error(exception_class = Exception, message = '')
         MotionSpec::Matcher::RaiseError.new(exception_class, message)
       end
       alias_method :raise_exception, :raise_error
