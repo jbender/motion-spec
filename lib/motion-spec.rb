@@ -7,16 +7,16 @@ require 'motion-require'
 
 # Proper load order of all the classes/modules
 ###
-def require_lib_file(file)
-  case file
+def require_lib_files(files)
+  case files
   when String
-    files = expanded_file_path(file)
-    files = Dir.glob(files) if file.include? '*'
+    file_paths = expanded_file_path(files)
+    file_paths = Dir.glob(file_paths) if files.include? '*'
   when Array
-    files = file.map { |f| expanded_file_path(f) }
+    file_paths = files.map { |f| expanded_file_path(f) }
   end
 
-  Motion::Require.all(files)
+  Motion::Require.all(file_paths)
 end
 
 def expanded_file_path(file)
@@ -24,16 +24,26 @@ def expanded_file_path(file)
 end
 
 # Let's start off with what version we're running
-require_lib_file('version')
+require_lib_files('version')
 
 # Load the output before the core so the core knows how to print
-require_lib_file('output/*')
+require_lib_files('output/*')
+
+# Add on to the context of specs
+require_lib_files('context_helper/*')
 
 # All the other core modules in the proper order
-require_lib_file(%w(core error specification platform context should))
+require_lib_files(%w(
+  core error specification platform context should expectation
+  fail_message_renderer
+))
+
+# Load expectation matchers
+require_lib_files('matcher/single_method')
+require_lib_files('matcher/*')
 
 # Monkeypatch core objects to respond to test methods
-require_lib_file('extensions/*')
+require_lib_files('extensions/*')
 
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&

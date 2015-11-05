@@ -8,4 +8,8 @@ module MotionSpec
       super message
     end
   end
+
+  class FailedExpectation < RuntimeError; end
+
+  class InvalidMatcher < RuntimeError; end
 end
