@@ -28,7 +28,9 @@ module MotionSpec
         @specifications.each(&:run)
       else
         spec = current_specification
-        return spec.performSelector('run', withObject: nil, afterDelay: 0) if spec
+        if spec
+          return spec.performSelector('run', withObject: nil, afterDelay: 0)
+        end
       end
 
       MotionSpec.context_did_finish(self)
@@ -84,12 +86,12 @@ module MotionSpec
     end
 
     def describe(*args, &block)
-      context = MotionSpec::Context.new("#{@name} #{args.join(' ')}", @before, @after, &block)
+      new_context = self.class.new(args.join(' '), @before, @after, &block)
 
       # FIXME: fix RM-879 and RM-806
-      build_ios_parent_context(context) unless Platform.android?
+      build_ios_parent_context(new_context) unless Platform.android?
 
-      context
+      new_context
     end
     alias_method :context, :describe
 
