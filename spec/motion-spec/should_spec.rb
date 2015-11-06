@@ -111,13 +111,13 @@ describe MotionSpec::Should do
     proc { proc { 1 + 1 }.should.not.raise }.should succeed
     proc { proc { 1 + 1 }.should.not.raise(Interrupt) }.should succeed
 
-    proc {
-      proc {
-        proc {
+    proc do
+      proc do
+        proc do
           Kernel.raise ZeroDivisionError.new('ArgumentError')
-        }.should.not.raise(RuntimeError, Comparable)
-      }.should.raise ZeroDivisionError
-    }.should succeed
+        end.should.not.raise(RuntimeError, Comparable)
+      end.should.raise ZeroDivisionError
+    end.should succeed
 
     proc { proc { raise 'Error' }.should.not.raise }.should fail
   end
@@ -150,10 +150,16 @@ describe MotionSpec::Should do
   end
 
   it 'has should.be.identical_to/same_as' do
-    proc { s = 'string'; s.should.be.identical_to s }.should succeed
+    proc do
+      s = 'string'
+      s.should.be.identical_to s
+    end.should succeed
     proc { 'string'.should.be.identical_to 'string' }.should fail
 
-    proc { s = 'string'; s.should.be.same_as s }.should succeed
+    proc do
+      s = 'string'
+      s.should.be.same_as s
+    end.should succeed
     proc { 'string'.should.be.same_as 'string' }.should fail
   end
 
@@ -165,8 +171,7 @@ describe MotionSpec::Should do
 
   it 'has should.be.close' do
     proc { 1.4.should.be.close 1.4, 0 }.should succeed
-    # TODO this one is disabled because it will probably never run on MacRuby.
-    # proc { 0.4.should.be.close 0.5, 0.1 }.should succeed
+    proc { 0.4.should.be.close 0.45, 0.1 }.should succeed
 
     proc { 0.4.should.be.close 0.5, 0.05 }.should fail
     proc { 0.4.should.be.close Object.new, 0.1 }.should fail

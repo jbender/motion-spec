@@ -21,8 +21,7 @@ module MotionSpec
     end
 
     def run
-      # TODO
-      # return unless name =~ RestrictContext
+      # TODO: return unless name =~ RestrictContext
 
       if Platform.android?
         @specifications.each(&:run)
