@@ -14,23 +14,47 @@ of `Bacon` which is a simplified version of `rspec`).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your app's `Gemfile`:
 
 ```ruby
 gem 'motion-spec'
 ```
 
-And then execute:
+If your `Rakefile` includes this line you're all set:
 
-    $ bundle
+```ruby
+Bundler.require
+```
 
-Or install it yourself as:
+Otherwise, you'll need to add this line to the top of your `Rakefile`:
 
-    $ gem install motion-spec
+```ruby
+require 'motion-spec'
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### By Example
+
+```ruby
+describe AwesomeClass do
+  it 'initializes with defaults' do
+    expect(AwesomeClass.new.attribute).to eq 'my default'
+  end
+
+  it { expect(true).to be_true }
+
+  context 'with a precondition' do
+    before { AwesomeClass.build_context }
+    after { AwesomeClass.reset_all }
+
+    let(:example_1) { AwesomeClass.new(foo: 'bar') }
+    subject { example_1.instance_function }
+
+    it { is_expected.to have_foo('bar') }
+  end
+end
+```
 
 ## Contributing
 
