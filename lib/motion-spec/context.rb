@@ -21,8 +21,7 @@ module MotionSpec
     end
 
     def run
-      # TODO
-      # return unless name =~ RestrictContext
+      # TODO: return unless name =~ RestrictContext
 
       if Platform.android?
         @specifications.each(&:run)
@@ -69,11 +68,16 @@ module MotionSpec
       instance_eval(&Shared[name])
     end
 
-    def it(description, &block)
+    def it(description = nil, &block)
       return unless description =~ RestrictName
+
       block ||= proc { should.flunk 'not implemented' }
+
       Counter[:specifications] += 1
-      @specifications << Specification.new(self, description, block, @before, @after)
+
+      @specifications << Specification.new(
+        self, description, block, @before, @after
+      )
     end
 
     def should(*args, &block)
