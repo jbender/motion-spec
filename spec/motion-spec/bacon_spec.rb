@@ -55,10 +55,13 @@ describe 'MotionSpec' do
   describe 'it' do
     context 'with a description' do
       before do
-        @example = proc { it('with a description') { true.should.be.true } }
+        @example = proc { it('tests') { true.should.be.true } }
       end
 
-      it('is valid') { @example.should.not.raise }
+      it 'is valid' do
+        @example.should.not.be.nil
+        @example.should.not.raise
+      end
     end
 
     context 'without a description' do
@@ -66,7 +69,10 @@ describe 'MotionSpec' do
         @example = proc { it { true.should.be.true } }
       end
 
-      it('is valid') { @example.should.not.raise }
+      it 'is valid' do
+        @example.should.not.be.nil
+        @example.should.not.raise
+      end
     end
   end
 

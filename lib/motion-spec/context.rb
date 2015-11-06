@@ -69,7 +69,7 @@ module MotionSpec
       instance_eval(&Shared[name])
     end
 
-    def it(description = nil, &block)
+    def it(description = '', &block)
       return unless description =~ RestrictName
 
       block ||= proc { should.flunk 'not implemented' }
