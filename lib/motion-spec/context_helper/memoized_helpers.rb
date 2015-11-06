@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module MotionSpec
   module ContextHelper
     module MemoizedHelpers
@@ -37,7 +38,7 @@ module MotionSpec
         before { subject }
       end
 
-      def is_expected
+      def is_expected # rubocop:disable Style/PredicateName
         expect(subject)
       end
 
