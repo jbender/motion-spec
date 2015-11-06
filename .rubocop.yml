@@ -46,6 +46,12 @@ Metrics/ParameterLists:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#too-many-params'
   Enabled: false
 
+Style/DotPosition:
+  EnforcedStyle: leading
+  SupportedStyles:
+    - leading
+    - trailing
+
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
 
@@ -56,6 +62,12 @@ Style/IndentationWidth:
 
 Style/MethodName:
   Enabled: false
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+  SupportedStyles:
+    - aligned
+    - indented
 
 Style/StringLiterals:
   Description: Checks if uses of quotes match the configured preference.
