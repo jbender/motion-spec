@@ -52,6 +52,24 @@ describe 'MotionSpec' do
     end
   end
 
+  describe 'it' do
+    context 'with a description' do
+      before do
+        @example = proc { it('with a description') { true.should.be.true } }
+      end
+
+      it 'is valid' { @example.should.not.raise }
+    end
+
+    context 'without a description' do
+      before do
+        @example = proc { it { true.should.be.true } }
+      end
+
+      it 'is valid' { @example.should.not.raise }
+    end
+  end
+
   describe 'shared contexts' do
     shared 'a shared context' do
       it 'gets called where it is included' do
