@@ -53,8 +53,21 @@ describe AwesomeClass do
 
     it { is_expected.to have_foo('bar') }
   end
+
+  context 'stubbing a method' do
+    before { subject.stub!(:awesome_method, return: 'awesomeness') }
+
+    subject { AwesomeClass.new }
+
+    it { expect(subject.awesome_method).to eq 'awesomeness' }
+  end
 end
 ```
+
+### `mock!` vs `stub!`
+
+`mock!` ensures that the method is called (and removes the implementation when
+it is), while `stub!` simply replaces the method for the duration of the spec.
 
 ## Contributing
 
