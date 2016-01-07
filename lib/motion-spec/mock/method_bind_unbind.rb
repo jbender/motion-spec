@@ -9,7 +9,7 @@ class Object
   end
 
   def meta_eval(&block)
-    metaclass.instance_eval &block
+    metaclass.instance_eval(&block)
   end
 
   # Adds methods to a metaclass

@@ -12,7 +12,7 @@ module MotionSpec
       end
 
       def fail!(subject, negated)
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_have_generic(
             negated, subject, @method_name, @args
           )

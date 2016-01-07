@@ -63,7 +63,7 @@ class Object
           args.length < ~arity
         end
 
-      raise ArgumentError unless has_mimimum_arguments
+      fail ArgumentError unless has_mimimum_arguments
     end
 
     default_operation =

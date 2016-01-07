@@ -34,7 +34,7 @@ describe 'Matcher::Change' do
   end
 
   context "when specified 'by'" do
-    it 'passes when changes are by the given amount'  do
+    it 'passes when changes are by the given amount' do
       expect do
         @test_object.add
         @test_object.add

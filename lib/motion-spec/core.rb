@@ -7,9 +7,9 @@ module MotionSpec
 
   Counter = Hash.new(0)
   ErrorLog = ''
-  Shared = Hash.new { |_, name|
-    raise NameError, "no such context: #{name.inspect}"
-  }
+  Shared = Hash.new do |_, name|
+    fail NameError, "no such context: #{name.inspect}"
+  end
 
   RestrictName    = //  unless defined? RestrictName
   RestrictContext = //  unless defined? RestrictContext
@@ -74,7 +74,7 @@ module MotionSpec
     @main_activity
   end
 
-  def self.context_did_finish(context)
+  def self.context_did_finish(_context)
     return if Platform.android?
 
     handle_specification_end

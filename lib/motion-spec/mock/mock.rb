@@ -20,7 +20,7 @@ class Object
     behavior =
       if block_given?
         lambda do |*args|
-          raise ArgumentError if block.arity >= 0 && args.length != block.arity
+          fail ArgumentError if block.arity >= 0 && args.length != block.arity
 
           MotionSpec::Mocks.verify([self, method])
           block.call(*args)

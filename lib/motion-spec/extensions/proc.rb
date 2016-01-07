@@ -9,10 +9,10 @@ class Proc
   end
 
   def throw?(sym)
-    catch(sym) {
+    catch(sym) do
       call
       return false
-    }
+    end
     true
   end
 

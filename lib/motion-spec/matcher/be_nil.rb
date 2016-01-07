@@ -3,11 +3,11 @@ module MotionSpec
   module Matcher
     class BeNil
       def matches?(value)
-        value == nil
+        value.nil?
       end
 
       def fail!(subject, negated)
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_be_nil(negated, subject)
         )
       end

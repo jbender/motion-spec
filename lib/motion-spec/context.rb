@@ -38,7 +38,7 @@ module MotionSpec
       @specifications[@current_specification_index]
     end
 
-    def specification_did_finish(spec)
+    def specification_did_finish(_spec)
       return if Platform.android?
 
       if (@current_specification_index + 1) < @specifications.size

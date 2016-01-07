@@ -22,7 +22,7 @@ module MotionSpec
     end
 
     def fail(matcher, negated)
-      raise matcher.fail!(@subject, negated, &@subject_block)
+      fail matcher.fail!(@subject, negated, &@subject_block)
     end
 
     def assert

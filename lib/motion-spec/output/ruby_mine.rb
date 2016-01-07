@@ -26,7 +26,7 @@ module MotionSpec
     end
 
     def handle_requirement_end(error)
-      if !error.empty?
+      unless error.empty?
         puts "##teamcity[testFailed timestamp = '#{java_time}' message = '#{escape_message(error)}' name = '#{escape_message(@@description)}']\n\n"
       end
       duration = ((Time.now - @@started) * 1000).to_i
@@ -36,7 +36,7 @@ module MotionSpec
     def handle_summary
       print ErrorLog if Backtraces
       puts '%d specifications (%d requirements), %d failures, %d errors' %
-               Counter.values_at(:specifications, :requirements, :failed, :errors)
+        Counter.values_at(:specifications, :requirements, :failed, :errors)
     end
 
     def spaces
