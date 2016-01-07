@@ -20,14 +20,18 @@ describe MotionSpec::Should do
   end
 
   it 'has should.satisfy' do
+    # rubocop:disable Lint/UselessComparison
     proc { should.satisfy { 1 == 1 } }.should succeed
+    # rubocop:enable Lint/UselessComparison
     proc { should.satisfy { 1 } }.should succeed
 
+    # rubocop:disable Lint/UselessComparison
     proc { should.satisfy { 1 != 1 } }.should fail
+    # rubocop:enable Lint/UselessComparison
     proc { should.satisfy { false } }.should fail
 
-    proc { 1.should.satisfy { |n| n % 2 == 0 } }.should fail
-    proc { 2.should.satisfy { |n| n % 2 == 0 } }.should succeed
+    proc { 1.should.satisfy(&:even?) }.should fail
+    proc { 2.should.satisfy(&:even?) }.should succeed
   end
 
   it 'has should.equal' do
@@ -40,9 +44,10 @@ describe MotionSpec::Should do
     proc { '1'.should.equal 1 }.should fail
   end
 
+  # rubocop:disable Style/SignalException
   it 'has should.raise' do
     proc { proc { raise 'Error' }.should.raise }.should succeed
-    proc { proc { raise 'Error' }.should.raise RuntimeError }.should succeed
+    proc { proc { raise 'Error' }.should.raise(RuntimeError) }.should succeed
     proc { proc { raise 'Error' }.should.not.raise }.should fail
     proc { proc { raise 'Error' }.should.not.raise(RuntimeError) }.should fail
 
@@ -65,6 +70,7 @@ describe MotionSpec::Should do
     ex.should.be.kind_of RuntimeError
     ex.message.should =~ /foo/
   end
+  # rubocop:enable Style/SignalException
 
   it 'has should.be.an.instance_of' do
     proc { 'string'.should.be.instance_of String }.should succeed
@@ -114,25 +120,29 @@ describe MotionSpec::Should do
     proc do
       proc do
         proc do
-          Kernel.raise ZeroDivisionError.new('ArgumentError')
+          Kernel.fail ZeroDivisionError.new('ArgumentError')
         end.should.not.raise(RuntimeError, Comparable)
       end.should.raise ZeroDivisionError
     end.should succeed
 
+    # rubocop:disable Style/SignalException
     proc { proc { raise 'Error' }.should.not.raise }.should fail
+    # rubocop:enable Style/SignalException
   end
 
   it 'has should.throw' do
     proc { proc { throw :foo }.should.throw(:foo) }.should succeed
-    proc { proc {       :foo }.should.throw(:foo) }.should fail
+    proc { proc { :foo }.should.throw(:foo) }.should fail
 
     should.throw(:foo) { throw :foo }
   end
 
+  # rubocop:disable Lint/UselessComparison
   it 'has should.not.satisfy' do
     proc { should.not.satisfy { 1 == 2 } }.should succeed
     proc { should.not.satisfy { 1 == 1 } }.should fail
   end
+  # rubocop:enable Lint/UselessComparison
 
   it 'has should.not.equal' do
     proc { 'string1'.should.not.eq 'string2' }.should succeed
@@ -253,6 +263,7 @@ describe "#should shortcut for #it('should')" do
     @called.should.eq true
   end
 
+  # rubocop:disable Lint/UselessComparison
   should 'save some characters by typing should' do
     proc { should.satisfy { 1 == 1 } }.should.not.raise
   end
@@ -264,6 +275,7 @@ describe "#should shortcut for #it('should')" do
   should 'work nested' do
     should.satisfy { 1 == 1 }
   end
+  # rubocop:enable Lint/UselessComparison
 
   # before { @count = MotionSpec::Counter[:specifications] }
   # should 'add new specifications' do

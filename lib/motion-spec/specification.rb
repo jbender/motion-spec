@@ -40,6 +40,8 @@ module MotionSpec
     def run_after_filters
       @ran_after_filters = true
       execute_block { @after_filters.each { |f| @context.instance_eval(&f) } }
+      Mocks.clear!
+      Stubs.clear!
     end
 
     def run
@@ -66,7 +68,7 @@ module MotionSpec
     def postpone_block(timeout = 1, &block)
       # If an exception occurred, we definitely don't need to schedule any more blocks
       return if @exception_occurred
-      raise MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
+      fail MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
 
       @postponed_blocks_count += 1
       @postponed_block = block
@@ -84,7 +86,7 @@ module MotionSpec
     def postpone_block_until_change(object_to_observe, key_path, timeout = 1, &block)
       # If an exception occurred, we definitely don't need to schedule any more blocks
       return if @exception_occurred
-      raise MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
+      fail MULTIPLE_POSTPONES_ERROR_MESSAGE if @postponed_block
 
       @postponed_blocks_count += 1
       @postponed_block = block
@@ -101,9 +103,11 @@ module MotionSpec
       postponed_change_block_timeout_exceeded
     end
 
-    def observeValueForKeyPath(key_path, ofObject:object, change:_, context:__)
+    # rubocop:disable Lint/UnusedMethodArgument
+    def observeValueForKeyPath(_key_path, ofObject:object, change:_, context:__)
       resume
     end
+    # rubocop:enable Lint/UnusedMethodArgument
 
     def postponed_change_block_timeout_exceeded
       remove_observer!
@@ -120,7 +124,7 @@ module MotionSpec
 
     def postponed_block_timeout_exceeded
       cancel_scheduled_requests!
-      execute_block { raise Error.new(:failed, "timeout exceeded: #{@context.name} - #{@description}") }
+      execute_block { fail Error.new(:failed, "timeout exceeded: #{@context.name} - #{@description}") }
       @postponed_blocks_count = 0
       finish_spec
     end
@@ -131,7 +135,8 @@ module MotionSpec
         NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: 'postponed_change_block_timeout_exceeded', object: nil)
       end
       remove_observer!
-      block, @postponed_block = @postponed_block, nil
+      block = @postponed_block
+      @postponed_block = nil
       run_postponed_block(block)
     end
 
@@ -153,7 +158,7 @@ module MotionSpec
     def finish_spec
       if !@exception_occurred && Counter[:requirements] == @number_of_requirements_before
         # the specification did not contain any requirements, so it flunked
-        execute_block { raise Error.new(:missing, "empty specification: #{@context.name} #{@description}") }
+        execute_block { fail Error.new(:missing, "empty specification: #{@context.name} #{@description}") }
       end
       run_after_filters
       exit_spec unless postponed?
@@ -181,9 +186,9 @@ module MotionSpec
       if e.is_a?(Exception)
         ErrorLog << "#{e.class}: #{e.message}\n"
         lines = $DEBUG ? e.backtrace : e.backtrace.find_all { |line| line !~ /bin\/macbacon|\/mac_bacon\.rb:\d+/ }
-        lines.each_with_index { |line, i|
+        lines.each_with_index do |line, i|
           ErrorLog << "\t#{line}#{i == 0 ? ": #{@context.name} - #{@description}" : ''}\n"
-        }
+        end
         ErrorLog << "\n"
       else
         if defined?(NSException)

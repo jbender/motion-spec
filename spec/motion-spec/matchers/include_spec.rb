@@ -11,12 +11,20 @@ describe 'Matcher::Include' do
   end
 
   it 'include passes when an object responds true to include?' do
-    class TestClass; def include?(_); true; end; end
+    class TestClass
+      def include?(_)
+        true
+      end
+    end
     expect(TestClass.new).to include(3)
   end
 
   it 'include passes when an object responds false to include?' do
-    class TestClass; def include?(_); false; end; end
+    class TestClass
+      def include?(_)
+        false
+      end
+    end
     test_object = TestClass.new
     expect_failure("#{test_object.inspect} expected to include 3") do
       expect(test_object).to include(3)

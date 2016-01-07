@@ -18,7 +18,7 @@ module MotionSpec
       end
 
       def fail!(subject, negated)
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_have_items(
             negated, subject, @number_of_items, subject.size, @key_type_name
           )

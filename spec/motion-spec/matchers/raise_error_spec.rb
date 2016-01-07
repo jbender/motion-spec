@@ -33,7 +33,7 @@ describe 'Matcher::RaiseError' do
   context 'with a string argument' do
     context 'raised message includes the string' do
       it 'passes' do
-        expect { raise 'one message' }.to raise_error('one message')
+        expect { fail 'one message' }.to raise_error('one message')
       end
     end
 
@@ -44,7 +44,7 @@ describe 'Matcher::RaiseError' do
           'but was #<RuntimeError: one message>'
 
         expect_failure(message) do
-          expect { raise 'one message' }.to raise_error('different')
+          expect { fail 'one message' }.to raise_error('different')
         end
       end
     end
@@ -53,7 +53,7 @@ describe 'Matcher::RaiseError' do
   context 'with a regex argument' do
     context 'raised message matches the regex' do
       it 'passes' do
-        expect { raise 'one message' }.to raise_error(/message/)
+        expect { fail 'one message' }.to raise_error(/message/)
       end
     end
 
@@ -64,7 +64,7 @@ describe 'Matcher::RaiseError' do
           "#{/different/.inspect} but was #<RuntimeError: one message>"
 
         expect_failure(message) do
-          expect { raise 'one message' }.to raise_error(/different/)
+          expect { fail 'one message' }.to raise_error(/different/)
         end
       end
     end
@@ -72,7 +72,7 @@ describe 'Matcher::RaiseError' do
 
   context 'with a class and string arguments' do
     it 'passes if the block raises an exception of the same class and includes the string in its message' do
-      expect { raise ArgumentError.new('with a message') }.to raise_error(ArgumentError, 'message')
+      expect { fail ArgumentError.new('with a message') }.to raise_error(ArgumentError, 'message')
     end
 
     it "fails if the block raises an exception of the same class and but doesn't include the string in its message" do
@@ -81,7 +81,7 @@ describe 'Matcher::RaiseError' do
         "matching #{'different'.inspect}"
 
       expect_failure(message) do
-        expect { raise ArgumentError.new('with a message') }.to raise_error(ArgumentError, 'different')
+        expect { fail ArgumentError.new('with a message') }.to raise_error(ArgumentError, 'different')
       end
     end
 
@@ -91,14 +91,14 @@ describe 'Matcher::RaiseError' do
         "matching #{'message'.inspect}"
 
       expect_failure(message) do
-        expect { raise ArgumentError.new('with a message') }.to raise_error(ZeroDivisionError, 'message')
+        expect { fail ArgumentError.new('with a message') }.to raise_error(ZeroDivisionError, 'message')
       end
     end
   end
 
   context 'with a class and regex arguements' do
     it 'passes if the block raises an exception of the same class and includes the string in its message' do
-      expect { raise ArgumentError.new('with a message') }.to raise_error(ArgumentError, /message/)
+      expect { fail ArgumentError.new('with a message') }.to raise_error(ArgumentError, /message/)
     end
 
     it "fails if the block raises an exception of the same class and but doesn't include the string in its message" do
@@ -107,7 +107,7 @@ describe 'Matcher::RaiseError' do
         "matching #{/different/.inspect}"
 
       expect_failure(message) do
-        expect { raise ArgumentError.new('with a message') }.to raise_error(ArgumentError, /different/)
+        expect { fail ArgumentError.new('with a message') }.to raise_error(ArgumentError, /different/)
       end
     end
 
@@ -117,7 +117,7 @@ describe 'Matcher::RaiseError' do
         " matching #{/message/.inspect} but was "
 
       expect_failure(message) do
-        expect { raise ArgumentError.new('with a message') }.to raise_error(ZeroDivisionError, /message/)
+        expect { fail ArgumentError.new('with a message') }.to raise_error(ZeroDivisionError, /message/)
       end
     end
   end

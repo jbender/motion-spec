@@ -7,7 +7,7 @@ module MotionSpec
         @error_message = (error_class.is_a?(String) || error_class.is_a?(Regexp)) ? error_class : message
       end
 
-      def matches?(value, &block)
+      def matches?(_value, &block)
         block.call
         false
       rescue Exception => e
@@ -19,12 +19,12 @@ module MotionSpec
         return false unless exception.is_a?(@error_class)
 
         is_match = case @error_message
-                    when String
-                      exception.message.include?(@error_message)
-                    when Regexp
-                      @error_message.match(exception.message)
-                    else
-                      false
+                   when String
+                     exception.message.include?(@error_message)
+                   when Regexp
+                     @error_message.match(exception.message)
+                   else
+                     false
                     end
 
         return false unless is_match
@@ -32,10 +32,10 @@ module MotionSpec
         true
       end
 
-      def fail!(subject, negated)
+      def fail!(_subject, negated)
         show_class = @error_class != Exception
         show_message = !@error_message.is_a?(String) || !@error_message.empty?
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_raise_error(
             negated, show_class, @error_class, show_message, @error_message,
             @rescued_exception

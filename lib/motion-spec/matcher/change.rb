@@ -11,7 +11,7 @@ module MotionSpec
         self
       end
 
-      def matches?(subject, &expectation_block)
+      def matches?(_subject, &expectation_block)
         old_value = @change_block.call
         expectation_block.call
         new_value = @change_block.call
@@ -23,8 +23,8 @@ module MotionSpec
         end
       end
 
-      def fail!(subject, negated)
-        raise FailedExpectation.new(
+      def fail!(_subject, negated)
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_change(
             negated, @change_amount, @value_diff
           )

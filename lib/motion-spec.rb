@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 unless defined?(Motion::Project::Config)
-  raise 'The MotionSpec gem must be required within a RubyMotion project Rakefile.'
+  fail 'The MotionSpec gem must be required within a RubyMotion project Rakefile.'
 end
 
 require 'motion-require'
@@ -45,10 +45,13 @@ require_lib_files('matcher/*')
 # Monkeypatch core objects to respond to test methods
 require_lib_files('extensions/*')
 
+# Allow method mocks and stubs
+require_lib_files('mock/*')
+
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&
-  UIDevice.respond_to?('currentDevice') &&
-  !UIDevice.currentDevice.name =~ /(iPhone|iPad) Simulator/
+    UIDevice.respond_to?('currentDevice') &&
+    !UIDevice.currentDevice.name =~ /(iPhone|iPad) Simulator/
 
   module Kernel
     def puts(*args)
@@ -74,8 +77,8 @@ module Motion
             # NOTE: This line is commented out to avoid loading Bacon.
             ( # ['spec.rb'] +
             Dir.glob(File.join('spec', 'helpers', '*.rb')) +
-            Dir.glob(File.join('project', 'template', App.template.to_s, 'spec-helpers', '*.rb'))).
-              map { |x| File.expand_path(x) }
+            Dir.glob(File.join('project', 'template', App.template.to_s, 'spec-helpers', '*.rb')))
+              .map { |x| File.expand_path(x) }
           end
         end
       end

@@ -17,7 +17,7 @@ module MotionSpec
       end
 
       def fail!(subject_array, negated)
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_match_array(
             negated, subject_array, @expected_array
           )

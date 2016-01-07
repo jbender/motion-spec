@@ -14,12 +14,12 @@ module MotionSpec
       end
 
       def matches?(subject)
-        raise InvalidMatcher.new(INVALID_MATCH_ERROR) unless @center_value
+        fail InvalidMatcher.new(INVALID_MATCH_ERROR) unless @center_value
         (subject - @center_value).abs <= @range
       end
 
       def fail!(subject, negated)
-        raise FailedExpectation.new(
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_be_within(
             negated, subject, @range, @center_value
           )

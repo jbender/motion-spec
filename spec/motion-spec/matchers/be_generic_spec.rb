@@ -17,12 +17,20 @@ describe 'Matcher::BeGeneric' do
   end
 
   it 'be_amazing passes when the value responds to amazing? and returns true' do
-    class TestClass; def amazing?; true; end; end
+    class TestClass
+      def amazing?
+        true
+      end
+    end
     expect(TestClass.new).to be_amazing
   end
 
   it 'be_amazing fails when the value responds to amazing? and returns false' do
-    class TestClass; def amazing?; false; end; end
+    class TestClass
+      def amazing?
+        false
+      end
+    end
     object = TestClass.new
     expect_failure("#{object.inspect} #amazing? expected to return true") { expect(object).to be_amazing }
   end

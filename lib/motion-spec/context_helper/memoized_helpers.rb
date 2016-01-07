@@ -5,7 +5,7 @@ module MotionSpec
       attr_accessor :__memoized
 
       def let(name, &block)
-        raise '#let or #subject called without a block' unless block_given?
+        fail '#let or #subject called without a block' unless block_given?
 
         (class << self; self; end).class_eval do
           define_method(name) do

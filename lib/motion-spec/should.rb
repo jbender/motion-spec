@@ -31,7 +31,7 @@ module MotionSpec
     alias_method :a,  :be
     alias_method :an, :be
 
-    def satisfy(*args, &block)
+    def satisfy(*args, &_block)
       if args.size == 1 && String === args.first
         description = args.shift
       else
@@ -82,7 +82,7 @@ module MotionSpec
     end
 
     def flunk(reason = 'Flunked')
-      raise Error.new(:failed, reason)
+      fail Error.new(:failed, reason)
     end
   end
 end

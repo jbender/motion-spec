@@ -38,7 +38,7 @@ module MotionSpec
       @specifications[@current_specification_index]
     end
 
-    def specification_did_finish(spec)
+    def specification_did_finish(_spec)
       return if Platform.android?
 
       if (@current_specification_index + 1) < @specifications.size
@@ -75,6 +75,8 @@ module MotionSpec
       block ||= proc { should.flunk 'not implemented' }
 
       Counter[:specifications] += 1
+
+      @after << proc { verify_mocks_were_called }
 
       @specifications << Specification.new(
         self, description, block, @before, @after
@@ -155,6 +157,20 @@ module MotionSpec
           parent_context.send(method_name, *args)
         end
       end
+    end
+
+    def mock_failures
+      MotionSpec::Mocks.failures
+    end
+
+    def verify_mocks_were_called
+      return unless mock_failures && !mock_failures.empty?
+
+      fails = mock_failures.map do |object, method|
+        "#{object.inspect} expected #{method}"
+      end
+
+      should.flunk "Unmet expectations: #{fails.join(', ')}"
     end
   end
 end

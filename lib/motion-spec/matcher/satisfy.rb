@@ -10,8 +10,8 @@ module MotionSpec
         @condition_block.call(*values)
       end
 
-      def fail!(subject, negated)
-        raise FailedExpectation.new(
+      def fail!(_subject, negated)
+        fail FailedExpectation.new(
           FailMessageRenderer.message_for_satisfy(negated)
         )
       end
