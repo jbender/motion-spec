@@ -40,6 +40,8 @@ module MotionSpec
     def run_after_filters
       @ran_after_filters = true
       execute_block { @after_filters.each { |f| @context.instance_eval(&f) } }
+      Mocks.clear!
+      Stubs.clear!
     end
 
     def run

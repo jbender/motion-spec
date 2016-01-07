@@ -45,6 +45,9 @@ require_lib_files('matcher/*')
 # Monkeypatch core objects to respond to test methods
 require_lib_files('extensions/*')
 
+# Allow method mocks and stubs
+require_lib_files('mock/*')
+
 # FIXME : Need better detection for iPhone Simulator
 if defined?(UIDevice) &&
   UIDevice.respond_to?('currentDevice') &&
