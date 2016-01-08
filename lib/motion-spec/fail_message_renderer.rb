@@ -5,6 +5,10 @@ module MotionSpec
       "#{negated ? ' not' : ''} expected"
     end
 
+    def self.message_for_be_a(negated, subject, test_class)
+      "#{subject.inspect}#{expectation(negated)} to be a kind of #{test_class}"
+    end
+
     def self.message_for_be_false(negated, subject)
       "#{subject.inspect}#{expectation(negated)} to be false"
     end
