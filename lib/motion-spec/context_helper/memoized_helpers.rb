@@ -25,12 +25,9 @@ module MotionSpec
       end
 
       def subject(name = nil, &block)
-        if name
-          let(name, &block)
-          alias_method :subject, name
-        else
-          let(:subject, &block)
-        end
+        let(name, &block) if name
+
+        let(:subject, &block)
       end
 
       def subject!(name = nil, &block)

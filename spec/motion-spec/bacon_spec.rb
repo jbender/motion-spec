@@ -271,4 +271,11 @@ describe 'MotionSpec' do
 
     it('works') { is_expected.to eq(5) }
   end
+
+  describe 'named subject' do
+    subject(:named) { 42 }
+
+    it('works when referenced by name') { expect(named).to eq 42 }
+    it('works when implied') { is_expected.to eq 42 }
+  end
 end
