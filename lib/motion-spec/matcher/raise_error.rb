@@ -4,7 +4,7 @@ module MotionSpec
     class RaiseError
       def initialize(error_class = Exception, message = '')
         @error_class = error_class.is_a?(Class) ? error_class : Exception
-        @error_message = (error_class.is_a?(String) || error_class.is_a?(Regexp)) ? error_class : message
+        @error_message = exception_matcher?(error_class) ? error_class : message
       end
 
       def matches?(_value, &block)
@@ -15,21 +15,24 @@ module MotionSpec
         exception_matches(e)
       end
 
+      def exception_matcher?(error_class)
+        error_class.is_a?(String) || error_class.is_a?(Regexp)
+      end
+
       def exception_matches(exception)
         return false unless exception.is_a?(@error_class)
 
-        is_match = case @error_message
-                   when String
-                     exception.message.include?(@error_message)
-                   when Regexp
-                     @error_message.match(exception.message)
-                   else
-                     false
-                    end
+        is_match =
+          case @error_message
+          when String
+            exception.message.include?(@error_message)
+          when Regexp
+            @error_message.match(exception.message)
+          else
+            false
+          end
 
-        return false unless is_match
-
-        true
+        is_match ? true : false
       end
 
       def fail!(_subject, negated)
