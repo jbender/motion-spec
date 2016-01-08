@@ -2,6 +2,11 @@
 module MotionSpec
   module ContextHelper
     module Matchers
+      def be_a(test_class)
+        MotionSpec::Matcher::BeA.new(test_class)
+      end
+      alias_method :be_an, :be_a
+
       def be_nil
         MotionSpec::Matcher::BeNil.new
       end
