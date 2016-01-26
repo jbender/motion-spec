@@ -278,4 +278,17 @@ describe 'MotionSpec' do
     it('works when referenced by name') { expect(named).to eq 42 }
     it('works when implied') { is_expected.to eq 42 }
   end
+
+  it 'works with namespaced modules' do
+    check(Kernel.send(:describe, MotionSpec::Context) {}, 'MotionSpec::Context')
+  end
+
+  it 'works with multiple arguments' do
+    check(Kernel.send(:describe, MotionSpec::Context, :empty) {}, 'MotionSpec::Context empty')
+  end
+
+  it 'prefixes the name of a nested context spaces based on nesting depth' do
+    check(describe('are nested') {}, 'are nested')
+    # check(describe('are nested') {}, '  are nested')
+  end
 end

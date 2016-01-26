@@ -26,67 +26,75 @@ module MotionSpec
     'colorized' => ColorizedOutput
   }
 
-  def self.add_context(context)
-    (@contexts ||= []) << context
-  end
-
-  def self.current_context_index
-    @current_context_index ||= 0
-  end
-
-  def self.current_context
-    @contexts[current_context_index]
-  end
-
-  def self.run(arg = nil)
-    unless respond_to?(:handle_specification_begin)
-      extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
+  class << self
+    def add_context(context)
+      (@contexts ||= []) << context
     end
 
-    @timer ||= Time.now
+    def current_context_index
+      @current_context_index ||= 0
+    end
 
-    if Platform.android?
+    def current_context
+      @contexts[current_context_index]
+    end
+
+    def run(arg = nil)
+      set_default_output
+
+      @timer ||= Time.now
+
+      Counter[:context_depth] += 1
+      Platform.android? ? run_android_specs : run_cocoa_specs
+    end
+
+    # Android-only.
+    def main_activity
+      @main_activity
+    end
+
+    def context_did_finish(context)
+      return if Platform.android?
+
+      Counter[:context_depth] -= 1
+
+      handle_specification_end
+
+      if (@current_context_index + 1) < @contexts.size
+        @current_context_index += 1
+        return run
+      end
+
+      handle_summary
+
+      exit(Counter.values_at(:failed, :errors).inject(:+))
+    end
+
+    private
+
+    def execute_context(context)
+      set_default_output
+
+      handle_specification_begin(context.name)
+      context.run
+      handle_specification_end
+    end
+
+    def run_android_specs
       @main_activity ||= arg
-
       @contexts.each { |context| execute_context(context) }
-      return handle_summary
+      handle_summary
     end
 
-    Counter[:context_depth] += 1
-    handle_specification_begin(current_context.name)
-    current_context.performSelector('run', withObject: nil, afterDelay: 0)
-  end
+    def run_cocoa_specs
+      handle_specification_begin(current_context.name)
+      current_context.performSelector('run', withObject: nil, afterDelay: 0)
+    end
 
-  def self.execute_context(context)
-    unless respond_to?(:handle_specification_begin)
+    def set_default_output
+      return if respond_to?(:handle_specification_begin)
+
       extend(Outputs[ENV['output']] || DEFAULT_OUTPUT_MODULE)
     end
-
-    Counter[:context_depth] += 1
-    handle_specification_begin(context.name)
-    context.run
-    handle_specification_end
-    Counter[:context_depth] -= 1
-  end
-
-  # Android-only.
-  def self.main_activity
-    @main_activity
-  end
-
-  def self.context_did_finish(_context)
-    return if Platform.android?
-
-    handle_specification_end
-
-    Counter[:context_depth] -= 1
-
-    if (@current_context_index + 1) < @contexts.size
-      @current_context_index += 1
-      return run
-    end
-
-    handle_summary
-    exit(Counter.values_at(:failed, :errors).inject(:+))
   end
 end

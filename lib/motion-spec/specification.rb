@@ -46,7 +46,7 @@ module MotionSpec
 
     def run
       MotionSpec.handle_requirement_begin(@description)
-      Counter[:depth] += 1
+      Counter[:context_depth] += 1
       run_before_filters
       @number_of_requirements_before = Counter[:requirements]
       run_spec_block unless postponed?
@@ -173,7 +173,7 @@ module MotionSpec
 
     def exit_spec
       cancel_scheduled_requests!
-      Counter[:depth] -= 1
+      Counter[:context_depth] -= 1
       MotionSpec.handle_requirement_end(@error)
       @context.specification_did_finish(self)
     end

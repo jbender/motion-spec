@@ -40,7 +40,7 @@ module MotionSpec
 
       result = yield(@object, *args)
 
-      if Counter[:depth] > 0
+      if Counter[:context_depth] > 0
         Counter[:requirements] += 1
         flunk(description) unless @negated ^ result
         result

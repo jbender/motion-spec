@@ -2,7 +2,7 @@
 module MotionSpec
   module SpecDoxOutput
     def handle_specification_begin(name)
-      puts spaces + name
+      puts "#{spaces}#{name}"
     end
 
     def handle_specification_end
@@ -24,6 +24,7 @@ module MotionSpec
     end
 
     def spaces
+      return if Counter[:context_depth] < 1
       '  ' * (Counter[:context_depth] - 1)
     end
   end
